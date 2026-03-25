@@ -66,7 +66,7 @@ li{margin-bottom:4px;color:var(--muted)}
 .btn-primary:hover{background:#163d85}
 .btn-outline{background:#fff;color:var(--text);border-color:var(--border)}
 .btn-outline:hover{background:var(--bg2)}
-.hero-photo{width:200px;height:200px;border-radius:12px;overflow:hidden;background:var(--bg3);border:1px solid var(--border)}
+.hero-photo{width:260px;height:260px;border-radius:12px;overflow:hidden;background:var(--bg3);border:1px solid var(--border)}
 .hero-photo img{width:100%;height:100%;object-fit:cover;object-position:center top}
 .hero-stats{display:flex;gap:28px;margin-top:32px;padding-top:24px;border-top:1px solid var(--border);flex-wrap:wrap}
 .hstat-num{font-size:22px;font-weight:700;color:var(--text);line-height:1}
@@ -239,14 +239,26 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
           <a class="btn btn-outline" href="#projects">Projects</a>
           <a class="btn btn-outline" href="images/resume.pdf" target="_blank" rel="noopener">Resume ↗</a>
         </div>
-        <div class="hero-stats">
-          <div><div class="hstat-num">5</div><div class="hstat-lbl">Yrs experience</div></div>
-          <div><div class="hstat-num">3</div><div class="hstat-lbl">Companies</div></div>
-          <div><div class="hstat-num">B.S.</div><div class="hstat-lbl">Mech. Eng · RIT</div></div>
-          <div><div class="hstat-num">3.4</div><div class="hstat-lbl">GPA</div></div>
+        <div style="display:flex;gap:12px;margin-top:28px;flex-wrap:wrap">
+          <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px 20px;display:flex;align-items:center;gap:14px">
+            <div style="font-size:26px;font-weight:700;color:var(--accent);line-height:1">5</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.3">Years<br>experience</div>
+          </div>
+          <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px 20px;display:flex;align-items:center;gap:14px">
+            <div style="font-size:26px;font-weight:700;color:var(--accent);line-height:1">3</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.3">Companies<br>worked</div>
+          </div>
+          <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px 20px;display:flex;align-items:center;gap:14px">
+            <div style="font-size:26px;font-weight:700;color:var(--accent);line-height:1">B.S.</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.3">Mech. Engineering<br>RIT</div>
+          </div>
+          <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px 20px;display:flex;align-items:center;gap:14px">
+            <div style="font-size:26px;font-weight:700;color:var(--accent);line-height:1">3.4</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.3">GPA</div>
+          </div>
         </div>
       </div>
-      <div class="hero-photo">
+      <div class="hero-photo" style="width:260px;height:260px">
         <img src="images/profile.jpg" alt="Tyler Gamble"/>
       </div>
     </div>
@@ -377,6 +389,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
     <p style="font-size:13px;color:var(--light)">Some projects are password protected. Sign in to view full case studies.</p>
     <div class="proj-grid">
 
+      <!-- 1. AirLock Pro -->
       <div class="proj-card locked" data-project="airlock" onclick="openModal('airlock')">
         <div class="proj-thumb">
           <img src="images/airlock-preview.jpg" alt="AirLock Pro" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
@@ -394,6 +407,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
         </div>
       </div>
 
+      <!-- 2. Military Radio Ground Station -->
       <div class="proj-card locked" data-project="groundstation" onclick="openModal('groundstation')">
         <div class="proj-thumb">
           <img src="images/groundstation-preview.jpg" alt="Military Radio Ground Station" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
@@ -411,6 +425,43 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
         </div>
       </div>
 
+      <!-- 3. Barcode Scanner -->
+      <div class="proj-card locked" data-project="barcode" onclick="openModal('barcode')">
+        <div class="proj-thumb">
+          <img src="images/barcode-preview.jpg" alt="Barcode Scanner" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+          <div class="proj-icon" style="display:none">📷</div>
+          <div class="lock-cover"><div class="li">🔒</div><div class="lt">Sign in to view</div><div class="ls">Click to authenticate</div></div>
+        </div>
+        <div class="proj-body">
+          <span class="proj-tag t-g">Professional · ACAD Design</span>
+          <h3>Barcode Scanner</h3>
+          <p>Custom vision system and fixture design for barcode scanning application. Prototype and turnkey delivery.</p>
+        </div>
+        <div class="proj-foot">
+          <span class="proj-link">🔒 Sign in to view →</span>
+          <span class="proj-status">ACAD Design</span>
+        </div>
+      </div>
+
+      <!-- 4. Calibration Tester -->
+      <div class="proj-card locked" data-project="calibration" onclick="openModal('calibration')">
+        <div class="proj-thumb">
+          <img src="images/calibration-preview.jpg" alt="Calibration Tester" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+          <div class="proj-icon" style="display:none">🔧</div>
+          <div class="lock-cover"><div class="li">🔒</div><div class="lt">Sign in to view</div><div class="ls">Click to authenticate</div></div>
+        </div>
+        <div class="proj-body">
+          <span class="proj-tag t-g">Professional · ACAD Design</span>
+          <h3>Calibration Tester</h3>
+          <p>Custom calibration fixture and testing system developed to client specification. Validated through rigorous testing protocols.</p>
+        </div>
+        <div class="proj-foot">
+          <span class="proj-link">🔒 Sign in to view →</span>
+          <span class="proj-status">ACAD Design</span>
+        </div>
+      </div>
+
+      <!-- 5. Nitrogen Generation System -->
       <div class="proj-card locked" data-project="nitrogen" onclick="openModal('nitrogen')">
         <div class="proj-thumb">
           <img src="images/nitrogen-preview.jpg" alt="Nitrogen Generation System" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
@@ -428,9 +479,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
         </div>
       </div>
 
-      <div class="proj-add"><div class="proj-add-icon" style="font-size:22px">+</div><div style="font-size:13px;font-weight:500">Add a project</div><div style="font-size:11px">Side project, personal build, concept</div></div>
-      <div class="proj-add"><div class="proj-add-icon" style="font-size:22px">+</div><div style="font-size:13px;font-weight:500">Add a project</div><div style="font-size:11px">3D prints, fixtures, engineering work</div></div>
-      <div class="proj-add"><div class="proj-add-icon" style="font-size:22px">+</div><div style="font-size:13px;font-weight:500">Add a project</div><div style="font-size:11px">Capstone, research, freelance</div></div>
     </div>
   </div>
 </section>
@@ -474,6 +522,8 @@ const USERS={admin:'password'};
 const PROJECT_URLS={
   airlock:'https://tgambii.github.io/projects/airlock.html',
   groundstation:'https://tgambii.github.io/projects/groundstation.html',
+  barcode:'https://tgambii.github.io/projects/barcode.html',
+  calibration:'https://tgambii.github.io/projects/calibration.html',
   nitrogen:'https://tgambii.github.io/projects/nitrogen.html'
 };
 let pending=null;
