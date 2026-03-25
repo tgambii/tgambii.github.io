@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>AirLock Pro — Pitch Deck</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --black:#0d0d0d;--white:#f5f5f3;--accent:#1a6cff;--accent2:#00c9a0;
+    --warn:#f59e0b;--dark:#141414;--mid:#1e1e1e;--border:#2a2a2a;
+    --text:#e8e8e4;--muted:#888;--card:#1a1a1a;
+  }
+  body{background:var(--black);color:var(--text);font-family:'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.6;overflow:hidden;height:100vh}
+  #deck{width:100%;height:100vh;position:relative}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;padding:40px 56px 72px;opacity:0;transition:opacity .4s}
+  .slide.active{display:flex;opacity:1}
+
+  #nav{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:12px;z-index:100;background:rgba(20,20,20,.9);border:1px solid var(--border);border-radius:40px;padding:10px 20px;backdrop-filter:blur(8px)}
+  #nav button{background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;padding:4px 10px;border-radius:20px;transition:color .2s,background .2s}
+  #nav button:hover{color:var(--white);background:var(--border)}
+  #slide-counter{font-size:12px;color:var(--muted);min-width:48px;text-align:center}
+  .dot-row{display:flex;gap:5px;align-items:center}
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--border);cursor:pointer;transition:background .2s,transform .2s}
+  .dot.on{background:var(--accent);transform:scale(1.3)}
+
+  .eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;font-weight:500}
+  .hero-title{font-size:54px;font-weight:700;line-height:1.05;letter-spacing:-.02em;color:var(--white)}
+  .hero-sub{font-size:19px;color:var(--muted);margin-top:14px;max-width:560px;line-height:1.5}
+  .slide-title{font-size:30px;font-weight:700;color:var(--white);margin-bottom:4px;letter-spacing:-.01em}
+  .slide-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+  .section-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent2);font-weight:600;margin-bottom:6px}
+
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
+  .card-sm{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+  .grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px}
+
+  .stat-num{font-size:38px;font-weight:700;color:var(--accent);line-height:1;letter-spacing:-.02em}
+  .stat-label{font-size:12px;color:var(--muted);margin-top:5px}
+
+  .prob-item{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--border)}
+  .prob-item:last-child{border-bottom:none}
+  .prob-icon{font-size:20px;flex-shrink:0;width:28px;text-align:center;margin-top:2px}
+  .prob-title{font-size:14px;font-weight:600;color:var(--white)}
+  .prob-desc{font-size:12px;color:var(--muted);margin-top:2px}
+
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th{text-align:left;padding:8px 12px;color:var(--muted);font-weight:500;border-bottom:1px solid var(--border);font-size:10px;letter-spacing:.05em;text-transform:uppercase}
+  td{padding:8px 12px;border-bottom:1px solid var(--border);color:var(--text)}
+  tr.highlight td{background:rgba(26,108,255,.08);color:var(--white);font-weight:500}
+  .check{color:var(--accent2)}
+  .cross{color:#ef4444}
+  .partial{color:var(--warn);font-size:12px}
+
+  .filter-row{display:grid;grid-template-columns:1.8fr 1.2fr 1fr 1fr 2fr;gap:0;border-bottom:1px solid var(--border);padding:10px 0;align-items:start}
+  .filter-row.header{color:var(--muted);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:6px 0 8px}
+  .badge{display:inline-block;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.02em}
+  .badge-green{background:rgba(0,201,160,.15);color:var(--accent2)}
+  .badge-blue{background:rgba(26,108,255,.15);color:#6aa3ff}
+  .badge-warn{background:rgba(245,158,11,.15);color:var(--warn)}
+  .badge-purple{background:rgba(139,92,246,.15);color:#b08bff}
+
+  .bar-wrap{background:var(--border);border-radius:4px;height:5px;margin-top:5px;overflow:hidden}
+  .bar-fill{height:100%;border-radius:4px}
+
+  .tl-item{display:flex;gap:16px;padding-bottom:20px;position:relative}
+  .tl-item:not(:last-child)::after{content:'';position:absolute;left:13px;top:28px;bottom:0;width:1px;background:var(--border)}
+  .tl-dot{width:28px;height:28px;border-radius:50%;background:var(--card);border:2px solid var(--accent);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--accent)}
+  .tl-phase{font-size:10px;color:var(--accent);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+  .tl-title{font-size:14px;font-weight:600;color:var(--white);margin:2px 0}
+  .tl-desc{font-size:11px;color:var(--muted)}
+
+  .logo-mark{font-size:26px;font-weight:800;letter-spacing:-.03em;color:var(--white)}
+  .logo-mark span{color:var(--accent)}
+  .tagline{font-size:12px;color:var(--muted);margin-top:3px;letter-spacing:.04em}
+  .accent-line{width:48px;height:3px;background:var(--accent);border-radius:2px;margin:14px 0}
+  .big-q{font-size:18px;font-weight:600;line-height:1.35;color:var(--white);border-left:3px solid var(--accent);padding-left:20px;margin:16px 0}
+
+  .cover-bg{position:absolute;inset:0;overflow:hidden;z-index:0}
+  .cover-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:40px 40px;opacity:.25}
+  .cover-circle{position:absolute;border-radius:50%;border:1px solid rgba(26,108,255,.15)}
+  .cover-content{position:relative;z-index:1;display:flex;flex-direction:column;height:100%;justify-content:center}
+  .slide-num-badge{position:absolute;top:40px;right:56px;font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+
+  .rev-split{display:flex;gap:0;border-radius:8px;overflow:hidden;height:36px;margin:10px 0}
+  .rev-seg{display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:var(--white)}
+
+  .scroll-inner{overflow-y:auto;flex:1;padding-right:4px}
+  .scroll-inner::-webkit-scrollbar{width:3px}
+  .scroll-inner::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+  /* dB bar styles */
+  .db-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .db-label{font-size:11px;color:var(--muted);min-width:140px;text-align:right}
+  .db-bar-wrap{flex:1;background:var(--border);border-radius:3px;height:18px;position:relative;overflow:hidden}
+  .db-bar{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:8px;font-size:10px;font-weight:600;color:rgba(255,255,255,.9);white-space:nowrap}
+  .db-val{font-size:11px;color:var(--muted);min-width:44px}
+  .db-highlight .db-label{color:var(--white);font-weight:600}
+  .db-highlight .db-val{color:var(--accent2);font-weight:600}
+
+  /* pressure drop table */
+  .pdrop-row{display:grid;grid-template-columns:2fr 1.2fr 1.2fr 2fr;gap:0;border-bottom:1px solid var(--border);padding:9px 0;align-items:center;font-size:12px}
+  .pdrop-row.hdr{font-size:10px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;padding:5px 0 7px}
+</style>
+</head>
+<body>
+<div id="deck">
+
+<!-- ══ SLIDE 1 — COVER ══ -->
+<div class="slide active" id="s1">
+  <div class="cover-bg">
+    <div class="cover-grid"></div>
+    <div class="cover-circle" style="width:600px;height:600px;right:-150px;top:-150px"></div>
+    <div class="cover-circle" style="width:300px;height:300px;right:80px;top:80px"></div>
+  </div>
+  <div class="cover-content">
+    <div class="logo-mark">Air<span>Lock</span> Pro</div>
+    <div class="tagline">Portable Air Treatment for Athletic Environments</div>
+    <div class="accent-line"></div>
+    <div class="hero-title">The Locker Room<br>Has a Problem.</div>
+    <div class="hero-sub">A purpose-built portable dehumidifier and air purifier engineered for the demands of professional and collegiate athletics.</div>
+    <div style="margin-top:36px;display:flex;gap:24px;align-items:center">
+      <div style="font-size:12px;color:var(--muted)">Seed Round · 2026</div>
+      <div style="width:1px;height:14px;background:var(--border)"></div>
+      <div style="font-size:12px;color:var(--muted)">Confidential</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 2 — PROBLEM ══ -->
+<div class="slide" id="s2">
+  <div class="slide-num-badge">01 — Problem</div>
+  <div class="eyebrow">The problem</div>
+  <div class="slide-title">Locker rooms are biologically hostile environments.</div>
+  <div class="slide-sub">Post-game conditions routinely exceed safe thresholds for humidity, air quality, and pathogen load.</div>
+  <div class="scroll-inner">
+    <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:20px">
+      <div class="card">
+        <div class="prob-item">
+          <div class="prob-icon">💧</div>
+          <div><div class="prob-title">Extreme humidity</div><div class="prob-desc">Post-game locker rooms regularly hit 80–95% relative humidity. Wet gear, post-shower steam, and 40+ athletes in an enclosed space create conditions that promote mold and bacterial growth within hours.</div></div>
+        </div>
+        <div class="prob-item">
+          <div class="prob-icon">☣️</div>
+          <div><div class="prob-title">Ammonia and VOC off-gassing</div><div class="prob-desc">Sweat decomposition releases ammonia, sulfur compounds, and volatile organic acids. Standard HVAC filters don't neutralize these — they only filter particulates.</div></div>
+        </div>
+        <div class="prob-item">
+          <div class="prob-icon">🦠</div>
+          <div><div class="prob-title">Fungal and bacterial spores</div><div class="prob-desc">Athlete's foot, ringworm, staph, and MRSA spread via airborne spore vectors in high-humidity environments. Known occupational hazards in professional locker rooms.</div></div>
+        </div>
+        <div class="prob-item">
+          <div class="prob-icon">🚌</div>
+          <div><div class="prob-title">Travel kills any fixed solution</div><div class="prob-desc">Teams spend 40–80 nights per season in away facilities. Permanent HVAC upgrades only protect home venues — visiting locker rooms and tournament sites are unaddressed.</div></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="card" style="text-align:center">
+          <div class="stat-num">85%</div>
+          <div class="stat-label">of NCAA athletic trainers report persistent locker room odor complaints</div>
+        </div>
+        <div class="card" style="text-align:center">
+          <div class="stat-num">3–6</div>
+          <div class="stat-label">pints of moisture released per hour in a post-game locker room</div>
+        </div>
+        <div class="card" style="text-align:center">
+          <div class="stat-num">40+</div>
+          <div class="stat-label">away nights per season with zero control over air quality</div>
+        </div>
+        <div class="card-sm" style="border-color:rgba(239,68,68,.3)">
+          <div class="section-label">Key insight</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.5">No product on the market combines dehumidification, HEPA filtration, and ammonia neutralization in a portable, travel-ready form factor designed for athletic use.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 3 — MARKET ══ -->
+<div class="slide" id="s3">
+  <div class="slide-num-badge">02 — Market</div>
+  <div class="eyebrow">Competitive landscape</div>
+  <div class="slide-title">A clear white space in a crowded adjacency.</div>
+  <div class="slide-sub">Existing products solve pieces of the problem. None solve all of it.</div>
+  <div class="scroll-inner">
+    <table style="margin-bottom:16px">
+      <thead>
+        <tr>
+          <th>Product category</th><th>Dehumidifies</th><th>HEPA filtration</th><th>Ammonia removal</th><th>Portable / travel</th><th>Athletic focus</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Home dehumidifiers (Frigidaire, Eva-Dry)</td><td class="check">✓</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td></tr>
+        <tr><td>Portable air purifiers (Dyson, Levoit)</td><td class="cross">✗</td><td class="check">✓</td><td class="partial">Partial</td><td class="check">✓</td><td class="cross">✗</td></tr>
+        <tr><td>Gear dryers (Peet, Gear Halo)</td><td class="partial">Gear only</td><td class="cross">✗</td><td class="cross">✗</td><td class="partial">Partial</td><td class="check">✓</td></tr>
+        <tr><td>Combo home units (Winix, Coway)</td><td class="check">✓</td><td class="check">✓</td><td class="partial">Partial</td><td class="cross">✗</td><td class="cross">✗</td></tr>
+        <tr><td>Commercial HVAC upgrades</td><td class="check">✓</td><td class="check">✓</td><td class="partial">Partial</td><td class="cross">✗</td><td class="partial">Partial</td></tr>
+        <tr class="highlight"><td>AirLock Pro</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+      </tbody>
+    </table>
+    <div class="grid-3">
+      <div class="card-sm">
+        <div class="section-label">TAM</div>
+        <div class="stat-num" style="font-size:28px">$2.4B</div>
+        <div class="stat-label">Global portable air treatment market (2025)</div>
+      </div>
+      <div class="card-sm">
+        <div class="section-label">SAM</div>
+        <div class="stat-num" style="font-size:28px">$340M</div>
+        <div class="stat-label">Athletic facility air quality — pro, NCAA, club sports</div>
+      </div>
+      <div class="card-sm">
+        <div class="section-label">SOM — Year 3</div>
+        <div class="stat-num" style="font-size:28px">$18M</div>
+        <div class="stat-label">Achievable revenue at 5% SAM penetration</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 4 — SOLUTION ══ -->
+<div class="slide" id="s4">
+  <div class="slide-num-badge">03 — Solution</div>
+  <div class="eyebrow">The solution</div>
+  <div class="slide-title">AirLock Pro — Built for the bench, not the bedroom.</div>
+  <div class="slide-sub">A 13 lb portable tower that plugs into any outlet and transforms a locker room in 90 minutes.</div>
+  <div class="scroll-inner">
+    <div class="grid-2" style="margin-bottom:14px">
+      <div class="card">
+        <div class="section-label">Form factor</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
+          <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--muted)">Height</span><span>18 in (457 mm)</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--muted)">Width</span><span>10 in (254 mm)</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--muted)">Depth</span><span>8 in (203 mm)</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--muted)">Weight</span><span>~13 lb (5.9 kg)</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--muted)">Power</span><span>110–240V auto-switching</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--muted)">Coverage</span><span>Up to 800 sq ft</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--muted)">Airflow target</span><span>300 CFM @ operating pressure</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--muted)">Target RH</span><span>50–55% (from 85–95%)</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--muted)">Time to target</span><span>60–90 min</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--muted)">Noise (game day mode)</span><span>42–46 dB — quiet office level</span></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="card-sm">
+          <div class="section-label">Why no water reservoir?</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.5">A post-game locker room generates <strong style="color:var(--white)">3–6 pints of moisture per hour</strong>. A reservoir large enough for a 90-minute session would add 6–12 lb and require manual emptying after every use. AirLock Pro uses a <strong style="color:var(--white)">desiccant exhaust system</strong>: moisture is expelled as warm humid air through a 4" flex hose to any floor drain or window. Continuous, hands-free, zero tank weight.</div>
+        </div>
+        <div class="card-sm">
+          <div class="section-label">Why desiccant over compressor?</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.5">Compressor units are heavy, loud (62–68 dB), and struggle at cooler temps. Desiccant rotors are silent, lightweight, effective from 40°F–100°F, require no refrigerant, and have a <strong style="color:var(--white)">rated lifespan of 10,000+ hours</strong> — eliminating regulatory and shipping constraints for air travel.</div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="padding:16px 20px">
+      <div class="section-label">Three operating modes</div>
+      <div style="display:flex;gap:0;border-radius:8px;overflow:hidden;margin-top:8px">
+        <div style="flex:1;padding:12px;background:rgba(26,108,255,.12);border-right:1px solid var(--border)">
+          <div style="font-size:11px;font-weight:700;color:var(--accent);margin-bottom:3px">QUICK HIT · 45 min · 50–54 dB</div>
+          <div style="font-size:11px;color:var(--muted)">High power · pre-game or rapid refresh</div>
+        </div>
+        <div style="flex:1;padding:12px;background:rgba(0,201,160,.08);border-right:1px solid var(--border)">
+          <div style="font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:3px">GAME DAY · 2 hr · 42–46 dB</div>
+          <div style="font-size:11px;color:var(--muted)">Balanced · auto-steps to maintain target RH</div>
+        </div>
+        <div style="flex:1;padding:12px;background:rgba(139,92,246,.08)">
+          <div style="font-size:11px;font-weight:700;color:#b08bff;margin-bottom:3px">OVERNIGHT · continuous · 36–40 dB</div>
+          <div style="font-size:11px;color:var(--muted)">Low power · sustained odor + humidity control</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 5 — SUB-ASSEMBLY ══ -->
+<div class="slide" id="s5">
+  <div class="slide-num-badge">04 — Engineering</div>
+  <div class="eyebrow">Sub-assembly architecture</div>
+  <div class="slide-title">Eight distinct sub-assemblies. One integrated system.</div>
+  <div class="scroll-inner">
+    <div class="grid-2">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="card-sm" style="display:flex;gap:12px;align-items:flex-start">
+          <div style="font-size:16px;font-weight:800;color:var(--accent);min-width:24px">A</div>
+          <div><div class="prob-title" style="font-size:13px">Air outlet + LED status ring</div><div class="prob-desc">Angled top cap exhaust · RGB ring: red→blue/green as RH improves</div></div>
+        </div>
+        <div class="card-sm" style="display:flex;gap:12px;align-items:flex-start">
+          <div style="font-size:16px;font-weight:800;color:var(--accent);min-width:24px">B</div>
+          <div><div class="prob-title" style="font-size:13px">Control panel</div><div class="prob-desc">One-button · 3-mode selector · differential pressure filter life LED</div></div>
+        </div>
+        <div class="card-sm" style="display:flex;gap:12px;align-items:flex-start">
+          <div style="font-size:16px;font-weight:800;color:var(--accent);min-width:24px">C</div>
+          <div><div class="prob-title" style="font-size:13px">Desiccant rotor module</div><div class="prob-desc">10–12" silica rotor · 75/25 process/regen zone split · 10,000 hr rated life · 150–250 FPM face velocity</div></div>
+        </div>
+        <div class="card-sm" style="display:flex;gap:12px;align-items:flex-start">
+          <div style="font-size:16px;font-weight:800;color:var(--accent);min-width:24px">D</div>
+          <div><div class="prob-title" style="font-size:13px">3-stage filtration stack</div><div class="prob-desc">Pre-mesh · HEPA H13 (14"×16" face) · Carbon/KMnO₄ (2" bed depth) · UV-C LED</div></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="card-sm" style="display:flex;gap:12px;align-items:flex-start">
+          <div style="font-size:16px;font-weight:800;color:var(--accent2);min-width:24px">E</div>
+          <div><div class="prob-title" style="font-size:13px">360° low-level intake grilles</div><div class="prob-desc">Side-mounted louvers · 250–300 in² free area · captures floor-level odors and spores</div></div>
+        </div>
+        <div class="card-sm" style="display:flex;gap:12px;align-items:flex-start">
+          <div style="font-size:16px;font-weight:800;color:var(--accent2);min-width:24px">F</div>
+          <div><div class="prob-title" style="font-size:13px">Centrifugal blower + EC motor</div><div class="prob-desc">Variable speed · maintains 300 CFM against loaded-filter static pressure · motor in airstream for passive cooling</div></div>
+        </div>
+        <div class="card-sm" style="display:flex;gap:12px;align-items:flex-start">
+          <div style="font-size:16px;font-weight:800;color:var(--accent2);min-width:24px">G</div>
+          <div><div class="prob-title" style="font-size:13px">Moisture exhaust port + wheel base</div><div class="prob-desc">Rear-face 4" port · 3-ft flex hose · 2× rollerblade wheels · cord exit · rubber feet</div></div>
+        </div>
+        <div class="card-sm" style="display:flex;gap:12px;align-items:flex-start">
+          <div style="font-size:16px;font-weight:800;color:var(--accent2);min-width:24px">H</div>
+          <div><div class="prob-title" style="font-size:13px">Differential pressure sensor</div><div class="prob-desc">Real-time filter load monitoring · triggers filter life LED · feeds V2 app dashboard</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:12px;padding:13px 18px">
+      <div style="font-size:11px;color:var(--muted)">Airflow path: Room air → Low grilles (E) → Pre-mesh → HEPA H13 → Carbon/KMnO₄ → UV-C → Desiccant rotor (C) → Clean dry air exhausted upward (A). Separate regeneration airstream strips moisture from rotor and exhausts via rear port (G). The two airstreams never mix.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 6 — AIRFLOW ENGINEERING ══ -->
+<div class="slide" id="s6">
+  <div class="slide-num-badge">05 — Airflow engineering</div>
+  <div class="eyebrow">Airflow sizing + static pressure</div>
+  <div class="slide-title">Multi-stage filtration creates resistance. Here's how we solve it.</div>
+  <div class="slide-sub">Every filter adds static pressure. The fan must overcome the cumulative load — even at end-of-filter-life.</div>
+  <div class="scroll-inner">
+    <div class="grid-2" style="margin-bottom:14px">
+      <div class="card">
+        <div class="section-label">Pressure drop per stage</div>
+        <div class="pdrop-row hdr"><div>Stage</div><div>Clean (in.w.c.)</div><div>Loaded</div><div>Notes</div></div>
+        <div class="pdrop-row"><div style="font-size:12px">Pre-filter mesh</div><div style="font-size:12px;color:var(--accent2)">0.02–0.05</div><div style="font-size:12px;color:var(--warn)">0.10–0.18</div><div style="font-size:11px;color:var(--muted)">Rises fast when dirty</div></div>
+        <div class="pdrop-row" style="background:rgba(26,108,255,.04)"><div style="font-size:12px;font-weight:600;color:var(--white)">HEPA H13</div><div style="font-size:12px;color:var(--accent2)">0.25–0.45</div><div style="font-size:12px;color:#ef4444">0.60–0.90</div><div style="font-size:11px;color:var(--muted)">Largest restriction in stack</div></div>
+        <div class="pdrop-row"><div style="font-size:12px">Carbon/KMnO₄ bed</div><div style="font-size:12px;color:var(--accent2)">0.10–0.20</div><div style="font-size:12px;color:var(--warn)">0.22–0.35</div><div style="font-size:11px;color:var(--muted)">Depends on bed depth</div></div>
+        <div class="pdrop-row"><div style="font-size:12px">UV-C LED stage</div><div style="font-size:12px;color:var(--accent2)">~0.01</div><div style="font-size:12px;color:var(--accent2)">~0.01</div><div style="font-size:11px;color:var(--muted)">Essentially zero — open path</div></div>
+        <div class="pdrop-row"><div style="font-size:12px">Desiccant rotor</div><div style="font-size:12px;color:var(--accent2)">0.15–0.30</div><div style="font-size:12px;color:var(--warn)">0.15–0.30</div><div style="font-size:11px;color:var(--muted)">Stable — self-regenerating</div></div>
+        <div class="pdrop-row"><div style="font-size:12px">Grilles + ducting</div><div style="font-size:12px;color:var(--accent2)">0.10–0.25</div><div style="font-size:12px;color:var(--warn)">0.10–0.25</div><div style="font-size:11px;color:var(--muted)">Fixed — geometry driven</div></div>
+        <div class="pdrop-row" style="border-bottom:none;background:rgba(26,108,255,.06)"><div style="font-size:12px;font-weight:700;color:var(--white)">Total system</div><div style="font-size:12px;font-weight:700;color:var(--accent2)">0.63–1.25</div><div style="font-size:12px;font-weight:700;color:#ef4444">1.17–1.98</div><div style="font-size:11px;color:var(--accent)">Fan must cover loaded case</div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="card-sm">
+          <div class="section-label">Fan sizing math</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.6">
+            Room: 800 ft² × 10 ft ceiling = <strong style="color:var(--white)">8,000 ft³</strong><br>
+            Target: 2–3 air changes/hr = <strong style="color:var(--white)">267–400 CFM</strong><br>
+            Design target: <strong style="color:var(--accent)">300 CFM at ≥1.5 in. w.c.</strong><br>
+            Fan type: <strong style="color:var(--white)">Forward-curved centrifugal blower</strong> — maintains CFM at high static pressure unlike axial fans which fall off the curve sharply
+          </div>
+        </div>
+        <div class="card-sm">
+          <div class="section-label">Filter face velocity constraint</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.6">
+            Max face velocity: <strong style="color:var(--white)">200 FPM</strong> (exceed this and particulates bypass HEPA media)<br>
+            Required face area: 300 CFM ÷ 200 FPM = <strong style="color:var(--accent)">1.5 ft² minimum</strong><br>
+            Filter dimensions: <strong style="color:var(--white)">14" × 16"</strong> — non-negotiable chassis constraint
+          </div>
+        </div>
+        <div class="card-sm" style="border-color:rgba(245,158,11,.3)">
+          <div class="section-label">Dirty filter problem — 3 solutions</div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px">
+            <div style="font-size:11px"><span style="color:var(--accent2);font-weight:600">EC variable speed motor</span><span style="color:var(--muted)"> — ramps up as resistance rises, maintains 300 CFM. Best solution. +$18–25 COGS.</span></div>
+            <div style="font-size:11px"><span style="color:var(--accent2);font-weight:600">Differential pressure sensor</span><span style="color:var(--muted)"> — real-time filter load detection. Triggers LED alert. ~$4 BOM cost.</span></div>
+            <div style="font-size:11px"><span style="color:var(--accent2);font-weight:600">Oversized filter media</span><span style="color:var(--muted)"> — 20–25% larger than minimum calc. Extends service life, flattens performance cliff.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="padding:13px 18px">
+      <div class="section-label">Six non-negotiable sizing constraints</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:6px">
+        <div style="font-size:11px"><span style="color:var(--accent);font-weight:600">1. Fan curve</span><span style="color:var(--muted)"> — centrifugal, 300 CFM at 1.5+ in. w.c. loaded</span></div>
+        <div style="font-size:11px"><span style="color:var(--accent);font-weight:600">2. Filter face area</span><span style="color:var(--muted)"> — 14"×16" min, 200 FPM max velocity</span></div>
+        <div style="font-size:11px"><span style="color:var(--accent);font-weight:600">3. Carbon bed depth</span><span style="color:var(--muted)"> — 1.5–2" min for ammonia dwell time</span></div>
+        <div style="font-size:11px"><span style="color:var(--accent);font-weight:600">4. Rotor face velocity</span><span style="color:var(--muted)"> — 150–250 FPM, 10–12" diameter rotor</span></div>
+        <div style="font-size:11px"><span style="color:var(--accent);font-weight:600">5. Pressure sensing</span><span style="color:var(--muted)"> — differential sensor for live filter load</span></div>
+        <div style="font-size:11px"><span style="color:var(--accent);font-weight:600">6. Motor cooling</span><span style="color:var(--muted)"> — positioned in airstream, thermal cutoff backup</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 7 — NOISE ══ -->
+<div class="slide" id="s7">
+  <div class="slide-num-badge">06 — Acoustics</div>
+  <div class="eyebrow">Acoustic performance</div>
+  <div class="slide-title">Quiet enough for a post-game talk. Loud enough to know it's working.</div>
+  <div class="slide-sub">Desiccant technology is inherently quieter than compressor alternatives. Here's where AirLock Pro sits in context.</div>
+  <div class="scroll-inner">
+    <div class="grid-2">
+      <div class="card">
+        <div class="section-label">dB(A) reference chart</div>
+        <div style="margin-top:10px">
+          <div class="db-row"><span class="db-label">Rustling leaves</span><div class="db-bar-wrap"><div class="db-bar" style="width:25%;background:#2a2a2a"></div></div><span class="db-val">20 dB</span></div>
+          <div class="db-row"><span class="db-label">Whisper at 5 ft</span><div class="db-bar-wrap"><div class="db-bar" style="width:37%;background:#2a2a2a"></div></div><span class="db-val">30 dB</span></div>
+          <div class="db-row db-highlight"><span class="db-label">Overnight mode ★</span><div class="db-bar-wrap"><div class="db-bar" style="width:44%;background:rgba(0,201,160,.5)">Quiet library / fridge hum</div></div><span class="db-val">36–40</span></div>
+          <div class="db-row db-highlight"><span class="db-label">Game Day mode ★</span><div class="db-bar-wrap"><div class="db-bar" style="width:54%;background:rgba(26,108,255,.6)">Quiet office / light rainfall</div></div><span class="db-val">42–46</span></div>
+          <div class="db-row"><span class="db-label">Normal conversation</span><div class="db-bar-wrap"><div class="db-bar" style="width:62%;background:#333"></div></div><span class="db-val">50 dB</span></div>
+          <div class="db-row db-highlight"><span class="db-label">Quick Hit mode ★</span><div class="db-bar-wrap"><div class="db-bar" style="width:63%;background:rgba(245,158,11,.5)">Moderate rainfall</div></div><span class="db-val">50–54</span></div>
+          <div class="db-row"><span class="db-label">Compressor dehumidifier</span><div class="db-bar-wrap"><div class="db-bar" style="width:77%;background:rgba(239,68,68,.4)">Vacuum cleaner in next room</div></div><span class="db-val">62–68</span></div>
+          <div class="db-row"><span class="db-label">Vacuum cleaner</span><div class="db-bar-wrap"><div class="db-bar" style="width:87%;background:#2a2a2a"></div></div><span class="db-val">70 dB</span></div>
+          <div class="db-row"><span class="db-label">Heavy traffic</span><div class="db-bar-wrap"><div class="db-bar" style="width:100%;background:#2a2a2a"></div></div><span class="db-val">85 dB</span></div>
+        </div>
+        <div style="margin-top:8px;font-size:10px;color:var(--muted)">★ AirLock Pro operating modes. Sound perception is logarithmic — every 10 dB is roughly 2× as loud to the human ear.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="card-sm">
+          <div class="section-label">Why desiccant is quieter</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.5">Compressor dehumidifiers have three noise sources: compressor piston, condenser fan, and evaporator fan. AirLock Pro has one: the centrifugal blower. The rotor drive motor runs at very low RPM and is effectively inaudible. The regeneration heater is completely silent.</div>
+        </div>
+        <div class="card-sm" style="border-color:rgba(0,201,160,.3)">
+          <div class="section-label">The key differentiator</div>
+          <div style="font-size:22px;font-weight:700;color:var(--accent2);margin:6px 0">~2× quieter</div>
+          <div style="font-size:12px;color:var(--muted)">than a compressor dehumidifier of equivalent capacity — perceptually, not just on paper. A coach can hold a post-game talk in the same room without raising their voice.</div>
+        </div>
+        <div class="card-sm">
+          <div class="section-label">Noise sources ranked</div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px">
+            <div style="display:flex;justify-content:space-between;font-size:12px"><span>Centrifugal blower (primary)</span><span style="color:var(--warn)">~85% of total</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:12px"><span>Airflow turbulence through grilles</span><span style="color:var(--warn)">~12%</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:12px"><span>Rotor drive motor</span><span style="color:var(--accent2)">~3%</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:12px"><span>Regeneration heater</span><span style="color:var(--accent2)">0% — silent</span></div>
+          </div>
+        </div>
+        <div class="card-sm">
+          <div class="section-label">EC motor advantage</div>
+          <div style="font-size:12px;color:var(--muted)">Variable speed EC motor allows true low-speed Overnight mode at 36–40 dB — something fixed-speed motors can't achieve cleanly without introducing harmonic noise from PWM throttling.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 8 — FILTER LONGEVITY ══ -->
+<div class="slide" id="s8">
+  <div class="slide-num-badge">07 — Consumables</div>
+  <div class="eyebrow">Filter longevity + maintenance</div>
+  <div class="slide-title">Designed for the equipment manager, not the homeowner.</div>
+  <div class="slide-sub">Every maintenance interval is optimized for the athletic calendar.</div>
+  <div class="scroll-inner">
+    <div class="filter-row header">
+      <div>Stage</div><div>Type</div><div>Interval</div><div>Annual cost</div><div>Notes</div>
+    </div>
+    <div class="filter-row">
+      <div><div style="font-size:13px;font-weight:600;color:var(--white)">Pre-filter mesh</div><div style="font-size:11px;color:var(--muted)">Stage 1 · structural debris</div></div>
+      <div><span class="badge badge-green">Washable</span></div>
+      <div style="font-size:12px">Rinse monthly<br><span style="color:var(--muted);font-size:11px">Replace yr 1</span></div>
+      <div style="font-size:13px;font-weight:600;color:var(--accent2)">~$8</div>
+      <div style="font-size:11px;color:var(--muted)">Catches hair, lint, large debris. Protects downstream stages. Quick rinse under tap. One annual replacement included with unit.</div>
+    </div>
+    <div class="filter-row">
+      <div><div style="font-size:13px;font-weight:600;color:var(--white)">HEPA H13</div><div style="font-size:11px;color:var(--muted)">Stage 2 · particulates + spores</div></div>
+      <div><span class="badge badge-blue">Replace</span></div>
+      <div style="font-size:12px">Every 4–6 mo<br><span style="color:var(--muted);font-size:11px">~2× per season</span></div>
+      <div style="font-size:13px;font-weight:600;color:var(--accent2)">$48/yr</div>
+      <div style="font-size:11px;color:var(--muted)">Catches fungal spores, skin cells, particulates to 0.3 μm. Athletic particulate load shortens standard 12-mo home lifecycle. Differential pressure sensor triggers change alert automatically.</div>
+    </div>
+    <div class="filter-row" style="background:rgba(245,158,11,.04);border-radius:6px;padding:10px 4px">
+      <div><div style="font-size:13px;font-weight:600;color:var(--white)">Carbon / KMnO₄ cartridge</div><div style="font-size:11px;color:var(--warn)">Stage 3 · primary revenue driver</div></div>
+      <div><span class="badge badge-warn">Replace</span></div>
+      <div style="font-size:12px">Every 3 mo<br><span style="color:var(--muted);font-size:11px">Quarterly</span></div>
+      <div style="font-size:13px;font-weight:600;color:var(--warn)">$72/yr</div>
+      <div style="font-size:11px;color:var(--muted)">Ammonia load from athletics saturates carbon beds faster than home use. KMnO₄ impregnation handles ammonia specifically. 2" bed depth is non-negotiable for adequate dwell time. Hardest-working stage.</div>
+    </div>
+    <div class="filter-row">
+      <div><div style="font-size:13px;font-weight:600;color:var(--white)">UV-C LED array</div><div style="font-size:11px;color:var(--muted)">Stage 4 · bacterial + viral kill</div></div>
+      <div><span class="badge badge-purple">Solid-state</span></div>
+      <div style="font-size:12px">~5 years<br><span style="color:var(--muted);font-size:11px">10,000 hr rated</span></div>
+      <div style="font-size:13px;font-weight:600;color:var(--accent2)">$0</div>
+      <div style="font-size:11px;color:var(--muted)">Mercury-free LED. No bulb to replace. No hazmat shipping. Degrades gracefully — no sudden failure. Matched lifecycle to desiccant rotor.</div>
+    </div>
+    <div class="filter-row" style="border-bottom:none">
+      <div><div style="font-size:13px;font-weight:600;color:var(--white)">Desiccant rotor</div><div style="font-size:11px;color:var(--muted)">Dehumidification core</div></div>
+      <div><span class="badge badge-purple">Durable</span></div>
+      <div style="font-size:12px">8–12 years<br><span style="color:var(--muted);font-size:11px">10,000+ hr rated</span></div>
+      <div style="font-size:13px;font-weight:600;color:var(--accent2)">$0</div>
+      <div style="font-size:11px;color:var(--muted)">Silica ceramic matrix — no moving parts of its own. Self-regenerating continuously. Upstream HEPA + pre-filter protect rotor pores from contamination. At 4 hrs/day use: 5–10 yr life. At 2 hrs/day: 10–20 yr.</div>
+    </div>
+    <div class="card" style="margin-top:12px;display:flex;justify-content:space-between;align-items:center;padding:14px 20px">
+      <div>
+        <div class="section-label">Recommended subscription bundle</div>
+        <div style="font-size:14px;font-weight:600;color:var(--white)">AirLock Care Pack — $29 / quarter</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">1× carbon/KMnO₄ cartridge + 1× HEPA H13 every other quarter · free shipping · filter life alerts via app</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:10px;color:var(--muted)">Annual subscription value</div>
+        <div style="font-size:26px;font-weight:700;color:var(--accent)">$116</div>
+        <div style="font-size:10px;color:var(--muted)">per unit · per year</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 9 — BUSINESS MODEL ══ -->
+<div class="slide" id="s9">
+  <div class="slide-num-badge">08 — Business model</div>
+  <div class="eyebrow">Business model</div>
+  <div class="slide-title">Hardware + recurring consumables. A razor-and-blade built for athletic seasons.</div>
+  <div class="scroll-inner">
+    <div class="grid-2" style="margin-bottom:14px">
+      <div class="card">
+        <div class="section-label">Hardware (unit sale)</div>
+        <div class="stat-num" style="font-size:34px">$399</div>
+        <div class="stat-label">MSRP · single unit</div>
+        <div style="margin-top:12px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--muted)">COGS (target)</span><span>~$140</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--muted)">Gross margin</span><span style="color:var(--accent2)">~65%</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0"><span style="color:var(--muted)">Team pack (6 units)</span><span>$2,199 · saves $195</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-label">Consumable subscription</div>
+        <div class="stat-num" style="font-size:34px">$116</div>
+        <div class="stat-label">Annual recurring revenue per unit</div>
+        <div style="margin-top:12px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--muted)">Subscription COGS</span><span>~$32</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--muted)">Gross margin</span><span style="color:var(--accent2)">~72%</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0"><span style="color:var(--muted)">5-yr LTV per unit</span><span style="color:var(--accent)">$979</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:14px">
+      <div class="section-label" style="margin-bottom:10px">Revenue mix over time</div>
+      <div style="display:flex;gap:14px;align-items:center;margin-bottom:7px">
+        <div style="font-size:11px;color:var(--muted);min-width:36px">Yr 1</div>
+        <div class="rev-split" style="flex:1"><div class="rev-seg" style="background:var(--accent);width:82%">Hardware 82%</div><div class="rev-seg" style="background:var(--accent2);flex:1">Sub</div></div>
+      </div>
+      <div style="display:flex;gap:14px;align-items:center;margin-bottom:7px">
+        <div style="font-size:11px;color:var(--muted);min-width:36px">Yr 2</div>
+        <div class="rev-split" style="flex:1"><div class="rev-seg" style="background:var(--accent);width:65%">Hardware 65%</div><div class="rev-seg" style="background:var(--accent2);flex:1">Subscription 35%</div></div>
+      </div>
+      <div style="display:flex;gap:14px;align-items:center">
+        <div style="font-size:11px;color:var(--muted);min-width:36px">Yr 3</div>
+        <div class="rev-split" style="flex:1"><div class="rev-seg" style="background:var(--accent);width:48%">Hardware</div><div class="rev-seg" style="background:var(--accent2);flex:1">Subscription 52% — majority recurring</div></div>
+      </div>
+    </div>
+    <div class="grid-3">
+      <div class="card-sm" style="text-align:center"><div class="stat-num" style="font-size:24px">$399</div><div class="stat-label">Unit price</div></div>
+      <div class="card-sm" style="text-align:center"><div class="stat-num" style="font-size:24px">$979</div><div class="stat-label">5-yr LTV per unit</div></div>
+      <div class="card-sm" style="text-align:center"><div class="stat-num" style="font-size:24px">2.5×</div><div class="stat-label">Hardware value multiplier via subscriptions</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 10 — GO TO MARKET ══ -->
+<div class="slide" id="s10">
+  <div class="slide-num-badge">09 — Go to market</div>
+  <div class="eyebrow">Go-to-market strategy</div>
+  <div class="slide-title">Sell to the person who buys the tape and the towels.</div>
+  <div class="slide-sub">Equipment managers and athletic trainers are the primary buyer — not facilities departments.</div>
+  <div class="scroll-inner">
+    <div class="grid-2" style="margin-bottom:14px">
+      <div class="card">
+        <div class="section-label">Primary buyers</div>
+        <div class="prob-item" style="padding:9px 0">
+          <div class="prob-icon" style="font-size:16px">🏈</div>
+          <div><div class="prob-title" style="font-size:12px">NCAA Division I programs</div><div class="prob-desc">~1,100 programs · dedicated equipment budgets · high travel frequency</div></div>
+        </div>
+        <div class="prob-item" style="padding:9px 0">
+          <div class="prob-icon" style="font-size:16px">🏒</div>
+          <div><div class="prob-title" style="font-size:12px">Professional leagues</div><div class="prob-desc">NFL, NBA, NHL, MLB, MLS · 120+ franchises · premium on athlete health</div></div>
+        </div>
+        <div class="prob-item" style="padding:9px 0;border-bottom:none">
+          <div class="prob-icon" style="font-size:16px">⚽</div>
+          <div><div class="prob-title" style="font-size:12px">Club and travel sports</div><div class="prob-desc">Youth elite, AAU, travel hockey · large volume · high unit quantity</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-label">Distribution channels</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
+          <div style="border-left:3px solid var(--accent);padding-left:12px"><div style="font-size:12px;font-weight:600;color:var(--white)">Direct to team (D2T)</div><div style="font-size:11px;color:var(--muted);margin-top:1px">AirLockPro.com · team portal · bulk pricing · subscription auto-enrollment</div></div>
+          <div style="border-left:3px solid var(--accent2);padding-left:12px"><div style="font-size:12px;font-weight:600;color:var(--white)">Athletic equipment distributors</div><div style="font-size:11px;color:var(--muted);margin-top:1px">BSN Sports, Varsity Brands · existing relationships with buyers</div></div>
+          <div style="border-left:3px solid var(--warn);padding-left:12px"><div style="font-size:12px;font-weight:600;color:var(--white)">Athletic trainer associations</div><div style="font-size:11px;color:var(--muted);margin-top:1px">NATA conference presence · clinical credibility · peer referral</div></div>
+          <div style="border-left:3px solid #b08bff;padding-left:12px"><div style="font-size:12px;font-weight:600;color:var(--white)">Amazon Business + B2B</div><div style="font-size:11px;color:var(--muted);margin-top:1px">Long-tail club purchasing · filter Subscribe &amp; Save</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="padding:14px 18px">
+      <div class="section-label">Positioning</div>
+      <div class="big-q" style="font-size:16px;margin:8px 0 0">"AirLock Pro rolls into the locker room 90 minutes before the team arrives. By tip-off, the air is clean, dry, and ready."</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 11 — ROADMAP ══ -->
+<div class="slide" id="s11">
+  <div class="slide-num-badge">10 — Roadmap</div>
+  <div class="eyebrow">Product roadmap</div>
+  <div class="slide-title">From prototype to platform in 24 months.</div>
+  <div class="scroll-inner">
+    <div class="grid-2">
+      <div>
+        <div class="tl-item">
+          <div class="tl-dot">1</div>
+          <div><div class="tl-phase">Q2 2026 · months 0–3</div><div class="tl-title">Engineering prototype</div><div class="tl-desc">Centrifugal blower selection · desiccant rotor sourcing · filter stack pressure drop validation · 14"×16" filter face confirmation · industrial design · CADR + dB testing</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot">2</div>
+          <div><div class="tl-phase">Q3 2026 · months 3–6</div><div class="tl-title">Pilot program — 5 teams</div><div class="tl-desc">NCAA D1 and minor league pilot · real-world humidity + filter load data · differential pressure sensor calibration · equipment manager feedback loops</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot">3</div>
+          <div><div class="tl-phase">Q4 2026 · months 6–9</div><div class="tl-title">Manufacturing + certification</div><div class="tl-desc">UL listing · CE marking · contract manufacturer · first production run 500 units · subscription platform launch · EC motor integration</div></div>
+        </div>
+        <div class="tl-item" style="padding-bottom:0">
+          <div class="tl-dot" style="border-color:var(--accent2)">4</div>
+          <div><div class="tl-phase" style="color:var(--accent2)">Q1 2027 · month 12</div><div class="tl-title">General availability</div><div class="tl-desc">Direct + distributor launch · NATA conference · target 200 units in first 90 days</div></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="card">
+          <div class="section-label">Version 2 features (2027)</div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px">
+            <div style="display:flex;gap:8px;font-size:12px"><span style="color:var(--accent2)">+</span><span>Companion app — live RH readout, filter life via ΔP sensor, usage logs</span></div>
+            <div style="display:flex;gap:8px;font-size:12px"><span style="color:var(--accent2)">+</span><span>Multi-unit mesh mode — coordinate 2+ units for larger facilities</span></div>
+            <div style="display:flex;gap:8px;font-size:12px"><span style="color:var(--accent2)">+</span><span>Onboard AQI + RH sensor — real-time air quality reporting</span></div>
+            <div style="display:flex;gap:8px;font-size:12px"><span style="color:var(--accent2)">+</span><span>Team logo / colorway customization program</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="section-label">Version 3 expansion (2028)</div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px">
+            <div style="display:flex;gap:8px;font-size:12px"><span style="color:var(--warn)">→</span><span>Adjacent markets: hotel rooms, medical waiting rooms, vet clinics</span></div>
+            <div style="display:flex;gap:8px;font-size:12px"><span style="color:var(--warn)">→</span><span>AirLock Nano — half-size unit for athlete hotel rooms on road trips</span></div>
+            <div style="display:flex;gap:8px;font-size:12px"><span style="color:var(--warn)">→</span><span>OEM licensing to athletic equipment brands</span></div>
+          </div>
+        </div>
+        <div class="card-sm" style="border-color:rgba(26,108,255,.3)">
+          <div class="section-label">IP strategy</div>
+          <div style="font-size:12px;color:var(--text)">Utility patent applications on: (1) desiccant + carbon/KMnO₄ combined airflow architecture, (2) athletic-environment-optimized filter cycling logic with ΔP sensing, (3) exhaust-only moisture management for portable dehumidifiers.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 12 — FINANCIALS ══ -->
+<div class="slide" id="s12">
+  <div class="slide-num-badge">11 — Financials</div>
+  <div class="eyebrow">Financial projections</div>
+  <div class="slide-title">Path to $10M ARR by end of Year 3.</div>
+  <div class="scroll-inner">
+    <div class="grid-3" style="margin-bottom:14px">
+      <div class="card" style="text-align:center">
+        <div class="section-label">Year 1</div>
+        <div class="stat-num">$420K</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px">~800 units · early adopter cohort</div>
+        <div style="margin-top:10px;font-size:11px">
+          <div style="display:flex;justify-content:space-between;padding:3px 0"><span style="color:var(--muted)">Hardware</span><span>$320K</span></div>
+          <div style="display:flex;justify-content:space-between;padding:3px 0"><span style="color:var(--muted)">Subscription</span><span>$100K</span></div>
+          <div style="display:flex;justify-content:space-between;padding:3px 0;border-top:1px solid var(--border);margin-top:3px"><span style="color:var(--muted)">Gross margin</span><span style="color:var(--accent2)">~65%</span></div>
+        </div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="section-label">Year 2</div>
+        <div class="stat-num">$2.8M</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px">~5,000 units · distributor launch</div>
+        <div style="margin-top:10px;font-size:11px">
+          <div style="display:flex;justify-content:space-between;padding:3px 0"><span style="color:var(--muted)">Hardware</span><span>$1.8M</span></div>
+          <div style="display:flex;justify-content:space-between;padding:3px 0"><span style="color:var(--muted)">Subscription</span><span>$1.0M</span></div>
+          <div style="display:flex;justify-content:space-between;padding:3px 0;border-top:1px solid var(--border);margin-top:3px"><span style="color:var(--muted)">Gross margin</span><span style="color:var(--accent2)">~67%</span></div>
+        </div>
+      </div>
+      <div class="card" style="text-align:center;border-color:rgba(26,108,255,.4)">
+        <div class="section-label">Year 3</div>
+        <div class="stat-num" style="color:var(--accent)">$10.2M</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px">~14,000 units · national + pro</div>
+        <div style="margin-top:10px;font-size:11px">
+          <div style="display:flex;justify-content:space-between;padding:3px 0"><span style="color:var(--muted)">Hardware</span><span>$4.9M</span></div>
+          <div style="display:flex;justify-content:space-between;padding:3px 0"><span style="color:var(--muted)">Subscription</span><span>$5.3M</span></div>
+          <div style="display:flex;justify-content:space-between;padding:3px 0;border-top:1px solid var(--border);margin-top:3px"><span style="color:var(--muted)">Gross margin</span><span style="color:var(--accent2)">~70%</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="section-label">Use of seed funds — $2.5M raise</div>
+        <div style="display:flex;flex-direction:column;gap:7px;margin-top:7px">
+          <div><div style="display:flex;justify-content:space-between;font-size:12px"><span>Engineering + tooling</span><span>$900K</span></div><div class="bar-wrap"><div class="bar-fill" style="width:36%;background:var(--accent)"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:12px"><span>First production run (500 units)</span><span>$700K</span></div><div class="bar-wrap"><div class="bar-fill" style="width:28%;background:var(--accent2)"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:12px"><span>Sales + marketing + pilots</span><span>$500K</span></div><div class="bar-wrap"><div class="bar-fill" style="width:20%;background:var(--warn)"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:12px"><span>Ops + certifications + IP</span><span>$250K</span></div><div class="bar-wrap"><div class="bar-fill" style="width:10%;background:#b08bff"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:12px"><span>Working capital reserve</span><span>$150K</span></div><div class="bar-wrap"><div class="bar-fill" style="width:6%;background:var(--muted)"></div></div></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="card-sm" style="text-align:center"><div class="stat-num" style="font-size:26px">18 mo</div><div class="stat-label">Projected runway on seed raise</div></div>
+        <div class="card-sm" style="text-align:center"><div class="stat-num" style="font-size:26px">Q3 '27</div><div class="stat-label">Projected break-even month</div></div>
+        <div class="card-sm" style="text-align:center"><div class="stat-num" style="font-size:26px">$2.5M</div><div class="stat-label">Seed raise target · 15% equity</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 13 — THE ASK ══ -->
+<div class="slide" id="s13">
+  <div class="slide-num-badge">12 — The ask</div>
+  <div class="cover-bg"><div class="cover-grid"></div></div>
+  <div style="position:relative;z-index:1;display:flex;flex-direction:column;height:100%;justify-content:center">
+    <div class="eyebrow">The ask</div>
+    <div class="hero-title" style="font-size:44px">Raising <span style="color:var(--accent)">$2.5M</span><br>to bring AirLock Pro<br>to market.</div>
+    <div class="accent-line"></div>
+    <div class="grid-3" style="margin-top:28px;margin-bottom:28px">
+      <div class="card-sm" style="text-align:center"><div style="font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px">Round</div><div style="font-size:18px;font-weight:700;color:var(--white)">Seed</div></div>
+      <div class="card-sm" style="text-align:center"><div style="font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px">Target raise</div><div style="font-size:18px;font-weight:700;color:var(--accent)">$2.5M</div></div>
+      <div class="card-sm" style="text-align:center"><div style="font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px">Equity offered</div><div style="font-size:18px;font-weight:700;color:var(--white)">15%</div></div>
+    </div>
+    <div class="big-q" style="font-size:17px;max-width:560px">"Every professional and collegiate locker room is a customer. The question is not whether this market exists — it's who gets there first."</div>
+    <div style="margin-top:20px;font-size:12px;color:var(--muted)">AirLock Pro · Seed Round 2026 · Confidential — not for distribution</div>
+  </div>
+</div>
+
+</div>
+
+<div id="nav">
+  <button onclick="go(-1)">&#8592;</button>
+  <div class="dot-row" id="dots"></div>
+  <span id="slide-counter">1 / 13</span>
+  <button onclick="go(1)">&#8594;</button>
+</div>
+
+<script>
+const slides=document.querySelectorAll('.slide');
+const total=slides.length;
+let cur=0;
+const dotsEl=document.getElementById('dots');
+const counter=document.getElementById('slide-counter');
+slides.forEach((_,i)=>{
+  const d=document.createElement('div');
+  d.className='dot'+(i===0?' on':'');
+  d.onclick=()=>show(i);
+  dotsEl.appendChild(d);
+});
+function show(n){
+  slides[cur].classList.remove('active');
+  dotsEl.children[cur].classList.remove('on');
+  cur=(n+total)%total;
+  slides[cur].classList.add('active');
+  dotsEl.children[cur].classList.add('on');
+  counter.textContent=(cur+1)+' / '+total;
+}
+function go(d){show(cur+d)}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')go(1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(-1);
+});
+</script>
+</body>
+</html>
