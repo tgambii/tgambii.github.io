@@ -380,13 +380,16 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
 ├── <span class="fn">main.py</span>                 <span class="cm"># tkinter GUI — entry point</span><br>
 ├── <span class="fn">requirements.txt</span>        <span class="cm"># packages needed to install</span><br>
 ├── <span class="fn">.env</span>                    <span class="cm"># SAP_USERNAME / SAP_PASSWORD</span><br>
-└── <span class="path">core/</span><br>
+├── <span class="path">core/</span><br>
 <div style="margin-left: 20px;">├── <span class="fn">__init__.py</span>         <span class="cm"># exposes SAP_barcode_map, barcode_readout</span><br></div>
 <div style="margin-left: 20px;">├── <span class="fn">barcode_map.py</span>      <span class="cm"># EAN-13 generation + lookup table</span><br></div>
 <div style="margin-left: 20px;">├── <span class="fn">sap_api.py</span>          <span class="cm"># SAP Material Master API client</span><br></div>
 <div style="margin-left: 20px;">└── <span class="fn">replace_letters.py</span>  <span class="cm"># letter → digit encoder</span><br></div>
 ├── <span class="path">Part Number Images/</span>     <span class="cm"># SAP_PN.png files</span><br>
+<div style="margin-left: 20px;">├── <span class="fn">TCG-HL-KM-1008.png</span>  <span class="cm"># .pngs for visual confirmation embedded in GUI</span><br></div>
+<div style="margin-left: 20px;">└── <span class="fn">etc.</span><br></div>
 └── <span class="path">exports/</span>                <span class="cm"># auto-created on first export, .xlsx output</span><br>
+      <div style="margin-left: 20px;">└── <span class="fn">2025-3.xlsx</span>  <span class="cm"># .pngs for visual confirmation embedded in GUI</span><br></div>
     </div>
 
     <h3 style="margin-top:28px;margin-bottom:10px">Key specs</h3>
