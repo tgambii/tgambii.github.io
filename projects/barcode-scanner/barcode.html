@@ -1,1 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barcode Scanner — Tyler Gamble</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+  :root {
+    --bg:          #ffffff;
+    --bg-subtle:   #f8f9fa;
+    --bg-muted:    #f1f3f5;
+    --border:      #e5e7eb;
+    --border-md:   #d1d5db;
+    --text:        #111827;
+    --text-muted:  #6b7280;
+    --text-light:  #9ca3af;
+    --accent:      #2563eb;
+    --accent-lt:   #eff6ff;
+    --accent-dark: #1d4ed8;
+    --green:       #16a34a;
+    --green-lt:    #f0fdf4;
+    --amber:       #d97706;
+    --amber-lt:    #fffbeb;
+    --red:         #dc2626;
+    --red-lt:      #fef2f2;
+    --mono:        'JetBrains Mono', monospace;
+    --sans:        'Inter', -apple-system, sans-serif;
+    --radius:      10px;
+    --radius-sm:   6px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── NAV ─────────────────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px; height: 64px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-weight: 700; font-size: 18px;
+    color: var(--text); text-decoration: none; letter-spacing: -0.02em;
+  }
+  .nav-logo span { color: var(--accent); }
+  nav ul { list-style: none; display: flex; gap: 28px; }
+  nav ul a {
+    color: var(--text-muted); text-decoration: none;
+    font-size: 14px; font-weight: 500; transition: color .15s;
+  }
+  nav ul a:hover { color: var(--text); }
+
+  /* ── LAYOUT ──────────────────────────────────────── */
+  .page { max-width: 800px; margin: 0 auto; padding: 0 32px; }
+
+  /* ── HERO ────────────────────────────────────────── */
+  .hero { padding: 120px 0 56px; }
+
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--text-muted); font-size: 14px; font-weight: 500;
+    text-decoration: none; margin-bottom: 32px;
+    transition: color .15s;
+  }
+  .back-link:hover { color: var(--accent); }
+  .back-link svg { transition: transform .15s; }
+  .back-link:hover svg { transform: translateX(-3px); }
+
+  .badge-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+  .badge {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.05em;
+    text-transform: uppercase; padding: 3px 10px; border-radius: 20px;
+    border: 1px solid transparent;
+  }
+  .badge-blue   { background: var(--accent-lt);  color: var(--accent);  border-color: #bfdbfe; }
+  .badge-amber  { background: var(--amber-lt);   color: var(--amber);   border-color: #fde68a; }
+  .badge-gray   { background: var(--bg-muted);   color: var(--text-muted); border-color: var(--border); }
+  .badge-red    { background: var(--red-lt);     color: var(--red);     border-color: #fecaca; }
+  .badge-green  { background: var(--green-lt);   color: var(--green);   border-color: #bbf7d0; }
+
+  h1 {
+    font-size: clamp(28px, 4.5vw, 44px);
+    font-weight: 700; line-height: 1.15;
+    letter-spacing: -0.03em; margin-bottom: 18px; color: var(--text);
+  }
+  .hero-sub {
+    font-size: 17px; color: var(--text-muted);
+    max-width: 580px; line-height: 1.75; margin-bottom: 36px;
+  }
+  .meta-row {
+    display: flex; flex-wrap: wrap; gap: 32px;
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .meta-item { display: flex; flex-direction: column; gap: 3px; }
+  .meta-label {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.07em; color: var(--text-light);
+  }
+  .meta-val { font-size: 14px; font-weight: 500; color: var(--text); }
+  .meta-warn { color: var(--amber); }
+
+  /* ── CALLOUT ─────────────────────────────────────── */
+  .callout {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 18px 20px; border-radius: var(--radius);
+    margin: 40px 0;
+  }
+  .callout-amber {
+    background: var(--amber-lt); border: 1px solid #fde68a;
+  }
+  .callout-red {
+    background: var(--red-lt); border: 1px solid #fecaca;
+  }
+  .callout-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .callout-body { font-size: 14px; line-height: 1.7; color: var(--text); }
+  .callout-body strong {
+    font-weight: 600; display: block; margin-bottom: 3px;
+  }
+  .callout-amber .callout-body strong { color: #92400e; }
+  .callout-amber .callout-body        { color: #78350f; }
+  .callout-red .callout-body strong   { color: #991b1b; }
+  .callout-red .callout-body          { color: #7f1d1d; }
+
+  /* ── SECTIONS ────────────────────────────────────── */
+  section { margin-bottom: 64px; }
+
+  .section-label {
+    font-size: 12px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 8px;
+  }
+  h2 {
+    font-size: 22px; font-weight: 700;
+    letter-spacing: -0.02em; margin-bottom: 14px; color: var(--text);
+  }
+  p { color: var(--text-muted); margin-bottom: 14px; line-height: 1.8; font-size: 15px; }
+  p:last-child { margin-bottom: 0; }
+
+  /* ── DIVIDER ─────────────────────────────────────── */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 64px 0; }
+
+  /* ── GUI MOCKUP ──────────────────────────────────── */
+  .mockup-wrap {
+    margin: 28px 0 8px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-md);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+  }
+  .mockup-bar {
+    display: flex; align-items: center; gap: 7px;
+    padding: 10px 16px;
+    background: #f3f4f6;
+    border-bottom: 1px solid var(--border);
+  }
+  .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .dot-r { background: #ff5f57; }
+  .dot-y { background: #ffbd2e; }
+  .dot-g { background: #28c840; }
+  .mockup-title {
+    flex: 1; text-align: center; font-size: 11px;
+    color: var(--text-light); font-family: var(--mono);
+  }
+  .mockup-caption {
+    padding: 10px 18px; font-size: 12px; color: var(--text-light);
+    text-align: center; border-top: 1px solid var(--border);
+    font-style: italic; background: var(--bg-subtle);
+  }
+
+  /* ── CODE BLOCK ──────────────────────────────────── */
+  .code-block {
+    background: #1e2330;
+    border: 1px solid #2e3340;
+    border-radius: var(--radius); padding: 20px 22px; margin: 20px 0;
+    font-family: var(--mono); font-size: 13px; line-height: 1.8;
+    overflow-x: auto; color: #93c5fd;
+  }
+  .code-block .kw { color: #c084fc; }
+  .code-block .fn { color: #60a5fa; }
+  .code-block .st { color: #86efac; }
+  .code-block .cm { color: #475569; font-style: italic; }
+  .code-block .nu { color: #fb923c; }
+  .code-block .path { color: #fcd34d; }
+  .code-block .dim  { color: #475569; }
+
+  /* inline code */
+  code {
+    font-family: var(--mono); font-size: 13px;
+    background: var(--bg-muted); color: var(--accent);
+    padding: 2px 7px; border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+
+  /* ── CARD GRID ───────────────────────────────────── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px; margin-top: 20px;
+  }
+  .card {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 18px 20px;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .card:hover {
+    border-color: var(--border-md);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .card-icon  { font-size: 20px; margin-bottom: 8px; }
+  .card-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
+  .card-desc  { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+  /* ── TECH PILLS ──────────────────────────────────── */
+  .tech-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .pill {
+    font-family: var(--mono); font-size: 12px; font-weight: 500;
+    padding: 4px 12px; border-radius: 20px;
+    background: var(--bg-muted);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+
+  /* ── TIMELINE ────────────────────────────────────── */
+  .timeline { margin-top: 20px; display: flex; flex-direction: column; }
+  .tl-item  { display: flex; gap: 18px; padding-bottom: 24px; }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-gutter {
+    display: flex; flex-direction: column;
+    align-items: center; flex-shrink: 0; width: 18px;
+  }
+  .tl-dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--accent); margin-top: 7px; flex-shrink: 0;
+    box-shadow: 0 0 0 3px #dbeafe;
+  }
+  .tl-stem {
+    width: 1px; flex: 1; background: var(--border); margin-top: 5px;
+  }
+  .tl-item:last-child .tl-stem { display: none; }
+  .tl-step {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.07em; color: var(--accent); margin-bottom: 3px;
+  }
+  .tl-head { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
+  .tl-body { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+
+  /* ── FOOTER ──────────────────────────────────────── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 28px 0; margin-top: 80px;
+    display: flex; justify-content: space-between; align-items: center;
+    max-width: 800px; margin-left: auto; margin-right: auto;
+    padding-left: 32px; padding-right: 32px;
+    color: var(--text-muted); font-size: 13px;
+  }
+  footer a { color: var(--text-muted); text-decoration: none; transition: color .15s; }
+  footer a:hover { color: var(--accent); }
+  .footer-links { display: flex; gap: 24px; }
+
+  @media (max-width: 640px) {
+    nav { padding: 0 20px; }
+    nav ul { gap: 16px; }
+    .page { padding: 0 20px; }
+    .hero { padding-top: 100px; }
+    footer { flex-direction: column; gap: 10px; text-align: center; padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="https://tgambii.github.io" class="nav-logo">Tyler<span>.</span></a>
+  <ul>
+    <li><a href="https://tgambii.github.io#about">About</a></li>
+    <li><a href="https://tgambii.github.io#experience">Experience</a></li>
+    <li><a href="https://tgambii.github.io#projects">Projects</a></li>
+    <li><a href="https://tgambii.github.io#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <a href="https://tgambii.github.io#projects" class="back-link">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back to projects
+    </a>
+
+    <div class="badge-row">
+      <span class="badge badge-blue">Professional</span>
+      <span class="badge badge-gray">Hardware / Software</span>
+      <span class="badge badge-amber">Curtiss-Wright</span>
+      <span class="badge badge-red">Concept — Not Deployed</span>
+    </div>
+
+    <h1>Barcode Scanner &amp;<br>SAP Integration</h1>
+
+    <p class="hero-sub">
+      A Python desktop application built to streamline parts tracking in the Curtiss-Wright hardware lab — scanning physical barcodes, resolving SAP part numbers, displaying part images, and exporting build reports to Excel.
+    </p>
+
+    <div class="meta-row">
+      <div class="meta-item">
+        <span class="meta-label">Company</span>
+        <span class="meta-val">Curtiss-Wright · Tewksbury, MA</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Role</span>
+        <span class="meta-val">Mechanical Design Engineer</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Type</span>
+        <span class="meta-val">Internal tooling (Python)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Status</span>
+        <span class="meta-val meta-warn">⚠ Awaiting API approval</span>
+      </div>
+    </div>
+
+    <div class="callout callout-amber">
+      <span class="callout-icon">⚠️</span>
+      <div class="callout-body">
+        <strong>Project status — pending IT approval</strong>
+        The application is fully built and functional using a manual parts list. Full deployment was blocked because the SAP BASIS team did not approve API endpoint access to Material Master data during the project window. The tool is production-ready and could be activated with a single endpoint URL and credentials.
+      </div>
+    </div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <section>
+    <p class="section-label">Overview</p>
+    <h2>The problem it solved</h2>
+    <p>
+      Tracking which parts are pulled from the hardware lab for each build required manually cross-referencing a physical parts list, looking up SAP material numbers, and entering quantities into a spreadsheet by hand. It was slow, error-prone, and entirely dependent on an engineer knowing the SAP part numbering system by memory.
+    </p>
+    <p>
+      The goal was to replace that process with a barcode scanner — scan the label on a bin, the app resolves the SAP part number instantly, shows a photo of the item for visual confirmation, takes a quantity, and at the end of the build exports a clean Excel report ready for SAP entry.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- GUI MOCKUP -->
+  <section>
+    <p class="section-label">Interface</p>
+    <h2>Application GUI</h2>
+    <p>Built with Python's tkinter library. The left panel handles scanning and confirmation; the right panel shows a running log of all parts scanned in the current build session.</p>
+
+    <div class="mockup-wrap">
+      <div class="mockup-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+        <span class="mockup-title">BarcodeScanner — python3 main.py</span>
+      </div>
+
+      <svg width="100%" viewBox="0 0 820 520" xmlns="http://www.w3.org/2000/svg" style="display:block;background:#1a1d23;">
+        <!-- Header bar -->
+        <rect x="0" y="0" width="820" height="52" fill="#3b82f6"/>
+        <text x="20" y="33" font-family="'Courier New',monospace" font-size="17" font-weight="bold" fill="#f0f2f6">▐ BARCODE SCANNER</text>
+        <text x="584" y="28" font-family="'Courier New',monospace" font-size="10" fill="#f0f2f6">Build №</text>
+        <rect x="636" y="16" width="160" height="26" rx="4" fill="#1d4ed8"/>
+        <text x="644" y="33" font-family="'Courier New',monospace" font-size="11" fill="#93c5fd">BUILD-2024-047</text>
+
+        <!-- Left panel -->
+        <rect x="12" y="64" width="292" height="444" rx="6" fill="#22262f" stroke="#2e3340" stroke-width="1"/>
+        <text x="24" y="90" font-family="'Courier New',monospace" font-size="11" font-weight="bold" fill="#3b82f6">SCAN</text>
+        <text x="24" y="112" font-family="'Courier New',monospace" font-size="9" fill="#8a8fa8">Barcode Number</text>
+        <rect x="24" y="118" width="178" height="28" rx="4" fill="#1a1d23" stroke="#2e3340" stroke-width="1"/>
+        <text x="32" y="136" font-family="'Courier New',monospace" font-size="10" fill="#8a8fa8">000091012...</text>
+        <rect x="208" y="118" width="72" height="28" rx="4" fill="#3b82f6"/>
+        <text x="222" y="136" font-family="'Courier New',monospace" font-size="10" font-weight="bold" fill="#f0f2f6">Scan</text>
+        <text x="24" y="164" font-family="'Courier New',monospace" font-size="9" fill="#8a8fa8">SAP P/N</text>
+        <rect x="24" y="170" width="256" height="28" rx="4" fill="#1a1d23" stroke="#2e3340" stroke-width="1"/>
+        <text x="32" y="188" font-family="'Courier New',monospace" font-size="10" fill="#f0f2f6">TCG-HL-ID-1012</text>
+        <text x="24" y="218" font-family="'Courier New',monospace" font-size="9" fill="#8a8fa8">PICTURE OF ITEM</text>
+        <rect x="24" y="224" width="256" height="180" rx="4" fill="#1a1d23" stroke="#2e3340" stroke-width="1"/>
+        <rect x="60" y="250" width="184" height="120" rx="3" fill="#22262f" stroke="#3b82f6" stroke-width="1.5"/>
+        <rect x="80" y="265" width="60" height="40" rx="2" fill="#1d4ed8" opacity=".6"/>
+        <rect x="155" y="265" width="70" height="18" rx="2" fill="#2e3340"/>
+        <rect x="155" y="290" width="50" height="12" rx="2" fill="#2e3340"/>
+        <line x1="80" y1="318" x2="240" y2="318" stroke="#2e3340" stroke-width="1"/>
+        <rect x="80" y="324" width="144" height="22" rx="2" fill="#2e3340"/>
+        <text x="148" y="340" font-family="'Courier New',monospace" font-size="8" fill="#8a8fa8" text-anchor="middle">TCG-HL-ID-1012.png</text>
+        <text x="24" y="422" font-family="'Courier New',monospace" font-size="9" fill="#8a8fa8">Quantity</text>
+        <rect x="24" y="428" width="80" height="26" rx="4" fill="#1a1d23" stroke="#2e3340" stroke-width="1"/>
+        <text x="32" y="445" font-family="'Courier New',monospace" font-size="11" fill="#f0f2f6">2</text>
+        <text x="24" y="468" font-family="'Courier New',monospace" font-size="9" fill="#22c55e">✓ Item found: TCG-HL-ID-1012</text>
+        <rect x="24" y="476" width="256" height="26" rx="4" fill="#3b82f6"/>
+        <text x="152" y="493" font-family="'Courier New',monospace" font-size="11" font-weight="bold" fill="#f0f2f6" text-anchor="middle">Submit</text>
+
+        <!-- Right panel -->
+        <rect x="316" y="64" width="492" height="444" rx="6" fill="#22262f" stroke="#2e3340" stroke-width="1"/>
+        <text x="328" y="90" font-family="'Courier New',monospace" font-size="11" font-weight="bold" fill="#3b82f6">SCANNED ITEMS</text>
+        <rect x="328" y="98" width="468" height="26" rx="3" fill="#3b82f6"/>
+        <text x="340" y="115" font-family="'Courier New',monospace" font-size="10" font-weight="bold" fill="#f0f2f6">SAP P/N</text>
+        <text x="708" y="115" font-family="'Courier New',monospace" font-size="10" font-weight="bold" fill="#f0f2f6">QTY</text>
+        <rect x="328" y="124" width="468" height="24" fill="#1e2330"/>
+        <text x="340" y="140" font-family="'Courier New',monospace" font-size="10" fill="#f0f2f6">TCG-HL-ID-1012</text>
+        <text x="720" y="140" font-family="'Courier New',monospace" font-size="10" fill="#f0f2f6">4</text>
+        <rect x="328" y="148" width="468" height="24" fill="#22262f"/>
+        <text x="340" y="164" font-family="'Courier New',monospace" font-size="10" fill="#f0f2f6">TCG-HL-RB-1041</text>
+        <text x="720" y="164" font-family="'Courier New',monospace" font-size="10" fill="#f0f2f6">2</text>
+        <rect x="328" y="172" width="468" height="24" fill="#1e2330"/>
+        <text x="340" y="188" font-family="'Courier New',monospace" font-size="10" fill="#f0f2f6">TCG-HL-PO-1089</text>
+        <text x="720" y="188" font-family="'Courier New',monospace" font-size="10" fill="#f0f2f6">1</text>
+        <rect x="328" y="196" width="468" height="24" fill="#22262f"/>
+        <rect x="328" y="220" width="468" height="24" fill="#1e2330"/>
+        <line x1="328" y1="244" x2="796" y2="244" stroke="#2e3340" stroke-width=".5" stroke-dasharray="4 4"/>
+        <line x1="328" y1="268" x2="796" y2="268" stroke="#2e3340" stroke-width=".5" stroke-dasharray="4 4"/>
+        <line x1="328" y1="292" x2="796" y2="292" stroke="#2e3340" stroke-width=".5" stroke-dasharray="4 4"/>
+        <line x1="328" y1="316" x2="796" y2="316" stroke="#2e3340" stroke-width=".5" stroke-dasharray="4 4"/>
+        <line x1="328" y1="340" x2="796" y2="340" stroke="#2e3340" stroke-width=".5" stroke-dasharray="4 4"/>
+        <line x1="328" y1="364" x2="796" y2="364" stroke="#2e3340" stroke-width=".5" stroke-dasharray="4 4"/>
+        <line x1="328" y1="388" x2="796" y2="388" stroke="#2e3340" stroke-width=".5" stroke-dasharray="4 4"/>
+        <line x1="328" y1="412" x2="796" y2="412" stroke="#2e3340" stroke-width=".5" stroke-dasharray="4 4"/>
+        <line x1="328" y1="436" x2="796" y2="436" stroke="#2e3340" stroke-width=".5" stroke-dasharray="4 4"/>
+        <rect x="328" y="470" width="468" height="28" rx="4" fill="#22c55e"/>
+        <text x="562" y="488" font-family="'Courier New',monospace" font-size="11" font-weight="bold" fill="#0f172a" text-anchor="middle">Save &amp; Export</text>
+      </svg>
+
+      <p class="mockup-caption">Left panel: scan input, SAP P/N lookup, part image, quantity &amp; submit. Right panel: live scanned-items log with one-click Excel export.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- HOW IT WORKS -->
+  <section>
+    <p class="section-label">Technical breakdown</p>
+    <h2>How it works</h2>
+    <p>
+      Parts at Curtiss-Wright follow a consistent naming convention: <code>TCG-HL-{PREFIX}-{NUMBER}</code>. The barcode generation algorithm converts the letter prefix into a numeric sequence, pads the result, and calculates a valid EAN-13 check digit — making the output scannable by any standard USB barcode reader.
+    </p>
+
+    <div class="code-block">
+<span class="cm"># EAN-13 generation — convert SAP P/N to a scannable barcode</span>
+<span class="kw">def</span> <span class="fn">generate_barcode</span>(entry, letter_map):
+    prefix, number = entry.split(<span class="st">"-"</span>)[<span class="nu">2</span>], entry.split(<span class="st">"-"</span>)[<span class="nu">3</span>]
+    barcode   = <span class="st">"0000"</span> + replace_letters(prefix, letter_map) + number
+
+    digits    = [<span class="fn">int</span>(d) <span class="kw">for</span> d <span class="kw">in</span> barcode]
+    total_sum = <span class="fn">sum</span>(digits[i] <span class="kw">if</span> i % <span class="nu">2</span> == <span class="nu">0</span> <span class="kw">else</span> digits[i] * <span class="nu">3</span>
+                    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="nu">12</span>))
+    check     = <span class="fn">str</span>((<span class="nu">10</span> - (total_sum % <span class="nu">10</span>)) % <span class="nu">10</span>)
+    <span class="kw">return</span> barcode + check
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon">📷</div>
+        <div class="card-title">Barcode resolution</div>
+        <div class="card-desc">USB scanner input is matched against a pre-built EAN-13 lookup table to return the SAP part number instantly.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🖼️</div>
+        <div class="card-title">Part image lookup</div>
+        <div class="card-desc">On match, the app loads <code style="font-size:11px;">SAP_PN.png</code> from a local folder and displays it for visual confirmation before quantity is entered.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">📊</div>
+        <div class="card-title">Excel export</div>
+        <div class="card-desc">On session close, quantities are written to a formatted <code style="font-size:11px;">.xlsx</code> file named after the build number, ready for SAP entry.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔗</div>
+        <div class="card-title">SAP API hook</div>
+        <div class="card-desc">Architecture supports live Material Master fetching via SAP OData REST API with secure environment variable credential management.</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ARCHITECTURE -->
+  <section>
+    <p class="section-label">Architecture</p>
+    <h2>File structure</h2>
+    <p>The project separates all backend logic into a <code>core/</code> package, keeping the GUI entry point clean and the business logic independently testable.</p>
+
+    <div class="code-block">
+<span class="path">BarcodeScanner/</span>
+├── <span class="fn">main.py</span>                 <span class="cm"># tkinter GUI — entry point</span>
+├── <span class="dim">requirements.txt</span>
+├── <span class="dim">.env</span>                    <span class="cm"># SAP_USERNAME / SAP_PASSWORD</span>
+│
+├── <span class="path">core/</span>
+│   ├── <span class="fn">__init__.py</span>         <span class="cm"># exposes SAP_barcode_map, barcode_readout</span>
+│   ├── <span class="fn">barcode_map.py</span>      <span class="cm"># EAN-13 generation + lookup table</span>
+│   ├── <span class="fn">sap_api.py</span>          <span class="cm"># SAP Material Master API client</span>
+│   └── <span class="fn">replace_letters.py</span>  <span class="cm"># letter → digit encoder</span>
+│
+├── <span class="dim">Part Number Images/</span>     <span class="cm"># SAP_PN.png files</span>
+└── <span class="dim">exports/</span>                <span class="cm"># auto-created on first export</span>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- BUILD PROCESS -->
+  <section>
+    <p class="section-label">Development process</p>
+    <h2>How it was built</h2>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-gutter"><div class="tl-dot"></div><div class="tl-stem"></div></div>
+        <div>
+          <div class="tl-step">Step 01</div>
+          <div class="tl-head">Command-line prototype</div>
+          <div class="tl-body">Started as a pure terminal application. Input a barcode number, get back a SAP P/N and prompt for quantity. Validated the EAN-13 algorithm against real part numbers before building any UI.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-gutter"><div class="tl-dot"></div><div class="tl-stem"></div></div>
+        <div>
+          <div class="tl-step">Step 02</div>
+          <div class="tl-head">EAN-13 barcode map</div>
+          <div class="tl-body">Built the letter-to-digit encoding system and check digit algorithm to convert the company's proprietary part numbering format into valid EAN-13 barcodes that any off-the-shelf USB scanner can read.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-gutter"><div class="tl-dot"></div><div class="tl-stem"></div></div>
+        <div>
+          <div class="tl-step">Step 03</div>
+          <div class="tl-head">SAP API integration</div>
+          <div class="tl-body">Designed the API client to pull live Material Master data from SAP ERP using OData REST. Implemented secure credential handling via environment variables. Hit a blocker — IT approval for the endpoint was not granted.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-gutter"><div class="tl-dot"></div><div class="tl-stem"></div></div>
+        <div>
+          <div class="tl-step">Step 04</div>
+          <div class="tl-head">Desktop GUI</div>
+          <div class="tl-body">Built the full tkinter interface to replace the command-line flow — part image display, quantity confirmation, live scanned-items table, and one-click Excel export named after the build number.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-gutter"><div class="tl-dot"></div><div class="tl-stem"></div></div>
+        <div>
+          <div class="tl-step">Step 05</div>
+          <div class="tl-head">Manual fallback &amp; packaging</div>
+          <div class="tl-body">With the API blocked, added a manual parts list fallback so the tool is still fully usable today. Explored PyInstaller packaging for distribution to Windows lab machines that don't have Python installed.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-red" style="margin-top:28px;">
+      <span class="callout-icon">⛔</span>
+      <div class="callout-body">
+        <strong>Deployment blocker</strong>
+        The SAP BASIS team did not provide an approved OData API endpoint for the Material Master service. The application is production-ready and the API client is fully implemented — it requires only a valid endpoint URL and credentials to go live. The project remains deployed in manual-list mode pending IT approval.
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- TECH STACK -->
+  <section>
+    <p class="section-label">Stack</p>
+    <h2>Built with</h2>
+    <p>Entirely Python — no web framework, no cloud dependency. Designed to run on any Windows or Mac machine in the lab with a one-line install.</p>
+    <div class="tech-row">
+      <span class="pill">Python 3</span>
+      <span class="pill">tkinter</span>
+      <span class="pill">Pillow</span>
+      <span class="pill">openpyxl</span>
+      <span class="pill">requests</span>
+      <span class="pill">python-dotenv</span>
+      <span class="pill">SAP OData REST</span>
+      <span class="pill">EAN-13</span>
+      <span class="pill">PyInstaller</span>
+    </div>
+  </section>
+
+</div><!-- /page -->
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 Tyler Gamble</span>
+  <div class="footer-links">
+    <a href="https://tgambii.github.io#projects">← All projects</a>
+    <a href="mailto:tylerjgamble98@gmail.com">tylerjgamble98@gmail.com</a>
+  </div>
+</footer>
+
+</body>
+</html>
