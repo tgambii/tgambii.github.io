@@ -22,14 +22,14 @@ body{font-family:'Helvetica Neue',Arial,sans-serif;font-size:15px;line-height:1.
 
 /* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,.97);border-bottom:1px solid var(--border)}
-.nav-inner{max-width:1040px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:52px}
+.nav-inner{max-width:1040px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:flex-start;gap:8px;height:52px}
 .nav-logo{font-size:15px;font-weight:700;color:var(--text);text-decoration:none}
 .nav-logo span{color:var(--accent)}
 .nav-links{display:flex;gap:2px}
 .nav-link{font-size:13px;color:var(--muted);padding:6px 11px;border-radius:5px;text-decoration:none;transition:.15s}
 .nav-link:hover{color:var(--text);background:var(--bg2)}
 .nav-cta{color:var(--accent) !important;font-weight:600}
-.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;margin-left:auto}
 .hamburger span{width:20px;height:1.5px;background:var(--text);border-radius:2px}
 .mobile-menu{display:none;flex-direction:column;background:#fff;border-top:1px solid var(--border);padding:10px 32px 16px}
 .mobile-menu.open{display:flex}
@@ -487,7 +487,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
     <div class="rule"></div>
     <p class="lead"style="max-width:100%;font-size:15px">Currently employed at Curtiss-Wright and open to conversations about full-time mechanical engineering roles.</p>
     <div class="contact-grid">
-      <div class="contact-card"><div class="contact-ico">📧</div><div><div class="contact-lbl">Email</div><div class="contact-val"><a href="mailto:tylerjgamble98@gmail.com">tylerjgamble98@gmail.com</a></div></div></div>
+      <div class="contact-card"><div class="contact-ico">📧</div><div><div class="contact-lbl">Email</div><div class="contact-val"><a href="/cdn-cgi/l/email-protection#90e4e9fcf5e2faf7f1fdf2fcf5a9a8d0f7fdf1f9fcbef3fffd"><span class="__cf_email__" data-cfemail="9febe6f3faedf5f8fef2fdf3faa6a7dff8f2fef6f3b1fcf0f2">[email&#160;protected]</span></a></div></div></div>
       <div class="contact-card"><div class="contact-ico">📱</div><div><div class="contact-lbl">Phone</div><div class="contact-val"><a href="tel:6037144351">(603) 714-4351</a></div></div></div>
       <div class="contact-card"><div class="contact-ico">🔗</div><div><div class="contact-lbl">LinkedIn</div><div class="contact-val"><a href="https://linkedin.com/in/tylerjgamble98" target="_blank">linkedin.com/in/tylerjgamble98</a></div></div></div>
       <div class="contact-card"><div class="contact-ico">📄</div><div><div class="contact-lbl">Resume</div><div class="contact-val"><a href="images/resume.pdf" target="_blank" rel="noopener">Download PDF ↗</a></div></div></div>
@@ -512,7 +512,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const USERS={admin:'password'};
 const PROJECT_URLS={
   zefyr:'https://tgambii.github.io/projects/zefyr/zefyr.html',
@@ -556,12 +556,3 @@ function unlockAll(){
 function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open')}
 function closeMenu(){document.getElementById('mobileMenu').classList.remove('open')}
 document.getElementById('loginModal').addEventListener('click',function(e){if(e.target===this)closeModal()});
-document.querySelectorAll('a[href^="#"]').forEach(a=>{
-  a.addEventListener('click',e=>{
-    const t=document.querySelector(a.getAttribute('href'));
-    if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'})}
-  });
-});
-</script>
-</body>
-</html>
