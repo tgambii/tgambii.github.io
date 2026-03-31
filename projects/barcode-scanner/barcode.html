@@ -212,18 +212,18 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
   <div class="wrap">
     <div class="hero-tag">📷 &nbsp;Professional · Curtiss-Wright · Hardware/Software Integration</div>
     <div class="hero-title">Barcode Scanner<br>&amp; SAP Integration</div>
-    <p class="hero-sub">A Python desktop application built to streamline parts tracking in the Curtiss-Wright hardware lab — scanning physical barcodes, resolving SAP part numbers, displaying part images, and exporting build reports to Excel.</p>
+    <p class="hero-sub">A Python desktop application built to streamline parts tracking in the Curtiss-Wright hardware lab — scanning physical barcodes, outputting SAP part numbers, displaying part images, and exporting build reports to Excel.</p>
     <div class="hero-meta">
-      <div class="hero-meta-item"><div class="lbl">Company</div><div class="val">Curtiss-Wright · Tewksbury, MA</div></div>
+      <div class="hero-meta-item"><div class="lbl">Company</div><div class="val">Curtiss-Wright</div></div>
       <div class="hero-meta-item"><div class="lbl">Role</div><div class="val">Mechanical Design Engineer</div></div>
-      <div class="hero-meta-item"><div class="lbl">Type</div><div class="val">Internal tooling (Python)</div></div>
-      <div class="hero-meta-item"><div class="lbl">Status</div><div class="val-warn">⚠ Awaiting API approval</div></div>
+      <div class="hero-meta-item"><div class="lbl">Type</div><div class="val">Internal Tooling</div></div>
+      <div class="hero-meta-item"><div class="lbl">Status</div><div class="val-warn">⚠ Awaiting API Approval</div></div>
     </div>
     <div class="callout callout-warn">
       <span class="callout-icon">⚠️</span>
       <div class="callout-body">
-        <strong>Project status — pending IT approval</strong>
-        The application is fully built and functional using a manual parts list. Full deployment was blocked because the SAP BASIS team did not approve API endpoint access to Material Master data. The tool is production-ready and could be activated with a single endpoint URL and credentials.
+        <strong>Project Status — Pending IT Approval</strong>
+        The application is fully built and functional using a manual parts list. Full deployment was blocked because the IT/SAP team did not approve API endpoint access to Material Master data. The tool is production-ready and could be activated with a single endpoint URL and credentials.
       </div>
     </div>
   </div>
@@ -233,15 +233,15 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
 <section id="overview">
   <div class="wrap">
     <div class="eyebrow">Overview</div>
-    <h2>The problem it solved.</h2>
+    <h2>The Problem to Solve.</h2>
     <div class="rule"></div>
     <p class="lead">Tracking which parts are pulled from the hardware lab for each build required manually cross-referencing a physical parts list, looking up SAP material numbers, and entering quantities into a spreadsheet by hand.</p>
-    <p>It was slow, error-prone, and entirely dependent on an engineer knowing the SAP part numbering system by memory. The goal was to replace that process with a barcode scanner — scan the label on a bin, get the SAP part number instantly, see a photo of the part for visual confirmation, enter a quantity, and export a clean report at end of build.</p>
+    <p>It was slow, error-prone, and entirely dependent on an assembler knowing the SAP part numbering system by memory. The goal was to replace that process with a barcode scanner — scan the label on a bin, get the SAP part number instantly, see a photo of the part for visual confirmation, enter a quantity, and export a clean report at end of a build.</p>
     <div class="cards c4" style="margin-top:28px">
-      <div class="card"><div class="card-icon">📷</div><div class="card-title">Barcode resolution</div><div class="card-desc">USB scanner input matched against a pre-built EAN-13 lookup table to return the SAP part number instantly.</div></div>
-      <div class="card"><div class="card-icon">🖼️</div><div class="card-title">Part image display</div><div class="card-desc">On match, the app loads <code>SAP_PN.png</code> from a local folder for visual confirmation before quantity is committed.</div></div>
-      <div class="card"><div class="card-icon">📊</div><div class="card-title">Excel export</div><div class="card-desc">Quantities written to a formatted <code>.xlsx</code> file named after the build number, ready for SAP entry.</div></div>
-      <div class="card"><div class="card-icon">🔗</div><div class="card-title">SAP API hook</div><div class="card-desc">Architecture supports live Material Master fetching via SAP OData REST API with secure credential management.</div></div>
+      <div class="card"><div class="card-icon"></div><div class="card-title">Barcode resolution</div><div class="card-desc">USB scanner input matched against a pre-built EAN-13 lookup table to return the SAP part number instantly.</div></div>
+      <div class="card"><div class="card-icon"></div><div class="card-title">Part image display</div><div class="card-desc">On match, the app loads that specific <code>SAP_PN.png</code> from a local folder for visual confirmation before quantity is committed.</div></div>
+      <div class="card"><div class="card-icon"></div><div class="card-title">Excel export</div><div class="card-desc">Quantities are written to a formatted <code>.xlsx</code> file named after the build number, ready for SAP entry.</div></div>
+      <div class="card"><div class="card-icon"></div><div class="card-title">SAP API hook</div><div class="card-desc">Architecture supports live Material Master fetching via SAP OData REST API with secure credential management.</div></div>
     </div>
   </div>
 </section>
@@ -250,7 +250,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
 <section class="tinted" id="gui">
   <div class="wrap">
     <div class="eyebrow">Application</div>
-    <h2>The application — pixel-accurate mockup.</h2>
+    <h2>The GUI.</h2>
     <div class="rule"></div>
     <p>This is a faithful HTML reproduction of the actual Python tkinter GUI. Colors, fonts, layout and widget order all match the real application exactly. The part image shown mirrors how a matched scan appears to the operator — the real app loads a <code>SAP_PN.png</code> from a local folder.</p>
 
@@ -285,7 +285,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
           <!-- Barcode Number label + entry + Scan button -->
           <span class="app-field-label">Barcode Number</span>
           <div class="app-entry-row">
-            <div class="app-entry placeholder">000011131008</div>
+            <div class="app-entry placeholder">0000111310081</div>
             <div class="app-btn">Scan</div>
           </div>
 
@@ -349,7 +349,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
       </div><!-- /app-body -->
     </div><!-- /app-window -->
 
-    <p style="font-size:12px;color:var(--light);margin-top:8px;text-align:center">Left: scan input → SAP P/N → part image (180×180 px) → quantity → submit. Right: running log with one-click Excel export.</p>
+    <p style="font-size:12px;color:var(--light);margin-top:8px;text-align:center">Left: scan input → SAP P/N → part image (180×180 px) → quantity → submit. <br> Right: running log with one-click Excel export.</p>
   </div>
 </section>
 
@@ -357,7 +357,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
 <section id="technical">
   <div class="wrap">
     <div class="eyebrow">Technical breakdown</div>
-    <h2>How it works.</h2>
+    <h2>How it Works.</h2>
     <div class="rule"></div>
     <p>Parts at Curtiss-Wright follow a consistent naming convention: <code>TCG-HL-{PREFIX}-{NUMBER}</code>. The barcode generation algorithm converts the letter prefix to a numeric sequence, pads the result to 12 digits, and calculates a valid EAN-13 check digit — making the output scannable by any standard USB barcode reader.</p>
 
@@ -378,8 +378,8 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
     <div class="code-block">
 <span class="path">BarcodeScanner/</span>
 ├── <span class="fn">main.py</span>                 <span class="cm"># tkinter GUI — entry point</span>
-├── <span class="dim">requirements.txt</span>
-├── <span class="dim">.env</span>                    <span class="cm"># SAP_USERNAME / SAP_PASSWORD</span>
+├── <span class="fn">requirements.txt</span>        <span class="cm"># packages needed to install</span>
+├── <span class="fn">.env</span>                    <span class="cm"># SAP_USERNAME / SAP_PASSWORD</span>
 │
 ├── <span class="path">core/</span>
 │   ├── <span class="fn">__init__.py</span>         <span class="cm"># exposes SAP_barcode_map, barcode_readout</span>
@@ -387,8 +387,8 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
 │   ├── <span class="fn">sap_api.py</span>          <span class="cm"># SAP Material Master API client</span>
 │   └── <span class="fn">replace_letters.py</span>  <span class="cm"># letter → digit encoder</span>
 │
-├── <span class="dim">Part Number Images/</span>     <span class="cm"># SAP_PN.png files</span>
-└── <span class="dim">exports/</span>                <span class="cm"># auto-created on first export</span>
+├── <span class="fn">Part Number Images/</span>     <span class="cm"># SAP_PN.png files</span>
+└── <span class="fn">exports/</span>                <span class="cm"># auto-created on first export, .xlsx output</span>
     </div>
 
     <h3 style="margin-top:28px;margin-bottom:10px">Key specs</h3>
