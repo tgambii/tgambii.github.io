@@ -393,13 +393,13 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
 
     <h3 style="margin-top:28px;margin-bottom:10px">Key specs</h3>
     <div class="spec">
-      <div class="spec-row"><div>Language</div><div>Python 3</div></div>
+      <div class="spec-row"><div>Language</div><div>Python</div></div>
       <div class="spec-row"><div>GUI framework</div><div>tkinter — ships with Python, no install needed</div></div>
       <div class="spec-row"><div>Barcode standard</div><div>EAN-13</div></div>
       <div class="spec-row"><div>Input method</div><div>USB barcode scanner (keyboard emulation)</div></div>
-      <div class="spec-row"><div>Part image format</div><div>PNG — named exactly SAP_PN.png, 180×180 px display</div></div>
+      <div class="spec-row"><div>Part image format</div><div>PNG — named exactly SAP_PN.png</div></div>
       <div class="spec-row"><div>Export format</div><div>.xlsx via openpyxl, named after build number</div></div>
-      <div class="spec-row"><div>Credential storage</div><div>Environment variables via .env — never hardcoded</div></div>
+      <div class="spec-row"><div>Credential storage</div><div>Environment variables via .env — never hardcoded for security</div></div>
       <div class="spec-row"><div>SAP integration</div><div>OData REST API — implemented, pending IT approval</div></div>
     </div>
   </div>
@@ -415,7 +415,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
       <div>
         <div class="tl">
           <div class="tl-item"><div class="tl-dot">1</div><div><div class="tl-phase">Step 01</div><div class="tl-title">Command-line prototype</div><div class="tl-desc">Started as a pure terminal application. Validated the EAN-13 algorithm against real part numbers before building any UI.</div></div></div>
-          <div class="tl-item"><div class="tl-dot">2</div><div><div class="tl-phase">Step 02</div><div class="tl-title">EAN-13 barcode map</div><div class="tl-desc">Built the letter-to-digit encoding system and check digit algorithm to convert proprietary part numbers into valid EAN-13 barcodes readable by any off-the-shelf USB scanner.</div></div></div>
+          <div class="tl-item"><div class="tl-dot">2</div><div><div class="tl-phase">Step 02</div><div class="tl-title">EAN-13 barcode map</div><div class="tl-desc">Built the letter-to-digit encoding system and check digit algorithm to convert internal part number scheme into valid EAN-13 barcodes readable by any off-the-shelf USB scanner.</div></div></div>
           <div class="tl-item"><div class="tl-dot">3</div><div><div class="tl-phase">Step 03</div><div class="tl-title">SAP API integration</div><div class="tl-desc">Designed the API client to pull live Material Master data from SAP ERP using OData REST with secure credential management via environment variables. Hit blocker — IT approval not granted.</div></div></div>
         </div>
       </div>
@@ -423,6 +423,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
         <div class="tl">
           <div class="tl-item"><div class="tl-dot">4</div><div><div class="tl-phase">Step 04</div><div class="tl-title">Desktop GUI</div><div class="tl-desc">Built the full tkinter interface — part image display, quantity confirmation, live scanned-items table, and one-click Excel export named after the build number.</div></div></div>
           <div class="tl-item"><div class="tl-dot">5</div><div><div class="tl-phase">Step 05</div><div class="tl-title">Manual fallback &amp; packaging</div><div class="tl-desc">Added a manual parts list fallback so the tool is fully usable without the API. Explored PyInstaller packaging for distribution to Windows lab machines without Python installed.</div></div></div>
+          <div class="tl-item"><div class="tl-dot">5</div><div><div class="tl-phase">Future Expansion</div><div class="tl-title">Uploadable Parts List &amp; Additional Column for Material Description</div><div class="tl-desc">TEXT HERE.</div></div></div>
         </div>
       </div>
     </div>
