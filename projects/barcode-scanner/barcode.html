@@ -9,7 +9,7 @@
 :root{
   --bg:#ffffff;--bg2:#f6f6f3;--bg3:#eeeeea;
   --text:#1a1a1a;--muted:#555;--light:#888;
-  --accent:#1a4fa8;--accent2:#0e7a5e;
+  --accent:#1a4fa8;--accFent2:#0e7a5e;
   --border:#dededd;--warn:#8a560a;
 }
 html{scroll-behavior:smooth}
@@ -358,21 +358,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
     <div class="eyebrow">Technical breakdown</div>
     <h2>How it Works.</h2>
     <div class="rule"></div>
-    <p>Parts at Curtiss-Wright follow a consistent naming convention: <code>TCG-HL-{PREFIX}-{NUMBER}</code>. The barcode generation 
-      algorithm converts the letter prefix to a numeric sequence, concatenates it with the 4 digit number, pads the result to 12 digits, and calculates a valid EAN-13 check digit — making the output scannable by any standard USB barcode reader. The first two parts of the naming convention are the same across all part number, and only the prefix and number designate the part.
-    </p>
-
-    <div class="code-block">
-<span class="cm"># EAN-13 generation — convert SAP P/N to a scannable barcode</span><br>
-<span class="kw">def</span> <span class="fn">generate_barcode</span>(entry, letter_map):<br>
-<div style="margin-left: 20px;">prefix, number = entry.split(<span class="st">"-"</span>)[<span class="nu">2</span>], entry.split(<span class="st">"-"</span>)[<span class="nu">3</span>]<br></div>
-<div style="margin-left: 20px;">barcode   = <span class="st">"0000"</span> + replace_letters(prefix, letter_map) + number<br></div>
-<div style="margin-left: 20px;">digits    = [<span class="fn">int</span>(d) <span class="kw">for</span> d <span class="kw">in</span> barcode]<br></div>
-<div style="margin-left: 20px;">total_sum = <span class="fn">sum</span>(digits[i] <span class="kw">if</span> i % <span class="nu">2</span> == <span class="nu">0</span> <span class="kw">else</span> digits[i] * <span class="nu">3</span>
-                    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="nu">12</span>))<br></div>
-<div style="margin-left: 20px;">check     = <span class="fn">str</span>((<span class="nu">10</span> - (total_sum % <span class="nu">10</span>)) % <span class="nu">10</span>)<br></div>
-<div style="margin-left: 20px;"><span class="kw">return</span> barcode + check</div>
-    </div>
     
     <h3 style="margin-top:28px;margin-bottom:10px">Architecture</h3>
 <p>The project is structured as a single-package Python application with four distinct layers:</p>
@@ -392,9 +377,11 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
 └── <span class="path">exports/</span>                <span class="cm"># auto-created on first export, .xlsx output</span><br>
       <div style="margin-left: 20px;">└── <span class="fn">2025-3.xlsx</span>  <span class="cm"># .pngs for visual confirmation embedded in GUI</span><br></div>
     </div>
+
 <h3 style="margin-top:28px;margin-bottom:10px">The Breakdown.</h3>
 <p>The application is split into four modules, each owning a single layer of responsibility. Data flows top-to-bottom: SAP API → barcode generation → GUI controller → Excel export.</p>
 <div class="rule"></div>
+    
     <p><code>sap_api.py</code> — SAP Integration Layer
     <ul>
       <li>Loads credentials from a <code>.env</code> file using <code>python-dotenv</code>, keeping secrets out of source control.</li>
@@ -403,7 +390,30 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
       <li>Gracefully degrades: on any network failure or non-200 response, returns <code>None</code>, allowing the app to fall back to a hardcoded <code>MANUAL_PARTS</code> list. This makes the tool functional in air-gapped or offline lab environments.</li>  
     </ul>
     </p>
-  
+
+    <p><code>replace_letters.py</code> — Encoding Utility
+    <ul>
+      <li>A pure, stateless function that maps alphabetic characters in a part number prefix to their positional equivalents (A→01, B→02, … Z→26).</li>
+      <li>This is the key transformation that converts human-readable SAP part number segments into an all-numeric string, a prerequisite for EAN-13 barcode generation.</li>
+    </ul>
+    </p>
+    
+    <p><code>barcode_map.py</code> — EAN-13 Generation & Data Model
+      <p>This is the computational core of the application. It executes at import time, building all lookup structures the GUI depends on. Parts at Curtiss-Wright follow a consistent naming convention: <code>TCG-HL-{PREFIX}-{NUMBER}</code>. The barcode generation 
+      algorithm converts the letter prefix to a numeric sequence, concatenates it with the 4 digit number, pads the result to 12 digits, and calculates a valid EAN-13 check digit — making the output scannable by any standard USB barcode reader. The first two parts of the naming convention are the same across all part number, and only the prefix and number designate the part.</p>
+    <div class="code-block">
+<span class="cm"># EAN-13 generation — convert SAP P/N to a scannable barcode</span><br>
+<span class="kw">def</span> <span class="fn">generate_barcode</span>(entry, letter_map):<br>
+<div style="margin-left: 20px;">prefix, number = entry.split(<span class="st">"-"</span>)[<span class="nu">2</span>], entry.split(<span class="st">"-"</span>)[<span class="nu">3</span>]<br></div>
+<div style="margin-left: 20px;">barcode   = <span class="st">"0000"</span> + replace_letters(prefix, letter_map) + number<br></div>
+<div style="margin-left: 20px;">digits    = [<span class="fn">int</span>(d) <span class="kw">for</span> d <span class="kw">in</span> barcode]<br></div>
+<div style="margin-left: 20px;">total_sum = <span class="fn">sum</span>(digits[i] <span class="kw">if</span> i % <span class="nu">2</span> == <span class="nu">0</span> <span class="kw">else</span> digits[i] * <span class="nu">3</span>
+                    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="nu">12</span>))<br></div>
+<div style="margin-left: 20px;">check     = <span class="fn">str</span>((<span class="nu">10</span> - (total_sum % <span class="nu">10</span>)) % <span class="nu">10</span>)<br></div>
+<div style="margin-left: 20px;"><span class="kw">return</span> barcode + check</div>
+    </div>
+    </p>  
+    
     <h3 style="margin-top:28px;margin-bottom:10px">Key specs</h3>
     <div class="spec">
       <div class="spec-row"><div>Language</div><div>Python</div></div>
