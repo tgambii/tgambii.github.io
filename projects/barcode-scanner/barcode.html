@@ -374,7 +374,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
 <div style="margin-left: 20px;"><span class="kw">return</span> barcode + check</div>
     </div>
     
-    <h3 style="margin-top:28px;margin-bottom:10px">File structure</h3>
+    <h3 style="margin-top:28px;margin-bottom:10px">Architecture</h3>
 <p>The project is structured as a single-package Python application with four distinct layers:</p>
     <div class="code-block">
 <span class="path">Barcode Scanner/</span><br>
@@ -392,7 +392,18 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
 └── <span class="path">exports/</span>                <span class="cm"># auto-created on first export, .xlsx output</span><br>
       <div style="margin-left: 20px;">└── <span class="fn">2025-3.xlsx</span>  <span class="cm"># .pngs for visual confirmation embedded in GUI</span><br></div>
     </div>
-
+<h3 style="margin-top:28px;margin-bottom:10px">The Breakdown.</h3>
+<p>The application is split into four modules, each owning a single layer of responsibility. Data flows top-to-bottom: SAP API → barcode generation → GUI controller → Excel export.</p>
+<div class="rule"></div>
+    <p><code>sap_api.py</code> — SAP Integration Layer
+    <ul>
+      <li>Loads credentials from a <code>.env</code> file using <code>python-dotenv</code>, keeping secrets out of source control.</li>
+      <li>Issues an authenticated HTTP GET to a SAP REST endpoint using <code>HTTPBasicAuth</code>.</li>
+      <li>Parses a JSON array response and extracts <code>MaterialNumber</code> fields, returning a flat <code>list[str]</code>.</li>
+      <li>Gracefully degrades: on any network failure or non-200 response, returns <code>None</code>, allowing the app to fall back to a hardcoded <code>MANUAL_PARTS</code> list. This makes the tool functional in air-gapped or offline lab environments.</li>  
+    </ul>
+    </p>
+  
     <h3 style="margin-top:28px;margin-bottom:10px">Key specs</h3>
     <div class="spec">
       <div class="spec-row"><div>Language</div><div>Python</div></div>
