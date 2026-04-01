@@ -367,7 +367,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
 <span class="kw">def</span> <span class="fn">generate_barcode</span>(entry, letter_map):<br>
 <div style="margin-left: 20px;">prefix, number = entry.split(<span class="st">"-"</span>)[<span class="nu">2</span>], entry.split(<span class="st">"-"</span>)[<span class="nu">3</span>]<br></div>
 <div style="margin-left: 20px;">barcode   = <span class="st">"0000"</span> + replace_letters(prefix, letter_map) + number<br></div>
-
 <div style="margin-left: 20px;">digits    = [<span class="fn">int</span>(d) <span class="kw">for</span> d <span class="kw">in</span> barcode]<br></div>
 <div style="margin-left: 20px;">total_sum = <span class="fn">sum</span>(digits[i] <span class="kw">if</span> i % <span class="nu">2</span> == <span class="nu">0</span> <span class="kw">else</span> digits[i] * <span class="nu">3</span>
                     <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="nu">12</span>))<br></div>
@@ -376,6 +375,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
     </div>
     
     <h3 style="margin-top:28px;margin-bottom:10px">File structure</h3>
+<p>The project is structured as a single-package Python application with four distinct layers:</p>
     <div class="code-block">
 <span class="path">Barcode Scanner/</span><br>
 ├── <span class="fn">main.py</span>                 <span class="cm"># tkinter GUI — entry point</span><br>
