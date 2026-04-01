@@ -381,23 +381,23 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
 <p>The application is split into four modules, each owning a single layer of responsibility. Data flows top-to-bottom: SAP API → barcode generation → GUI controller → Excel export.</p>
 <br>
     
-    <p><code>sap_api.py</code> — SAP Integration Layer
-      <ul style="list-style: disc; padding-left: 20px; color: #8A8FA8;">
+    <h4><code>sap_api.py</code> — SAP Integration Layer</h4>
+      <p><ul style="list-style: disc; padding-left: 20px; color: #8A8FA8;">
         <li>Loads credentials from a <code>.env</code> file using <code>python-dotenv</code>, keeping secrets out of source control.</li>
         <li>Issues an authenticated HTTP GET to a SAP REST endpoint using <code>HTTPBasicAuth</code>.</li>
         <li>Parses a JSON array response and extracts <code>MaterialNumber</code> fields, returning a flat <code>list[str]</code>.</li>
         <li>Gracefully degrades: on any network failure or non-200 response, returns <code>None</code>, allowing the app to fall back to a hardcoded <code>MANUAL_PARTS</code> list. This makes the tool functional in air-gapped or offline lab environments.</li>  
       </ul>
-    </p>
+      </p>
 <br>
-    <p><code>replace_letters.py</code> — Encoding Utility
-      <ul style="list-style: disc; padding-left: 20px; color: #8A8FA8;">
+    <h4><code>replace_letters.py</code> — Encoding Utility</h4>
+      <p><ul style="list-style: disc; padding-left: 20px; color: #8A8FA8;">
         <li>A pure, stateless function that maps alphabetic characters in a part number prefix to their positional equivalents (A→01, B→02, … Z→26).</li>
         <li>This is the key transformation that converts human-readable SAP part number segments into an all-numeric string, a prerequisite for EAN-13 barcode generation.</li>
       </ul>
-    </p>
+      </p>
 <br>  
-    <p><code>barcode_map.py</code> — EAN-13 Generation & Data Model
+    <h4><code>barcode_map.py</code> — EAN-13 Generation & Data Model</h4>
       <p>This is the computational core of the application. It executes at import time, building all lookup structures the GUI depends on. It calls <code>get_material_numbers()</code> to fetch live SAP data (or uses fallback <code>MANUAL_PARTS</code> list).
         <br><br>Parts at Curtiss-Wright follow a consistent naming convention: <code>TCG-HL-{PREFIX}-{NUMBER}</code>. The barcode generation 
       algorithm converts the letter prefix to a numeric sequence, concatenates it with the 4 digit number, pads the result to 12 digits, and calculates a valid EAN-13 check digit — making the output scannable by any standard USB barcode reader. The first two parts of the naming convention are the same across all part number, and only the prefix and number designate the part.</p>
@@ -414,11 +414,11 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
       </div>
     </p>
 <br>
-    <p><code>main.py</code> — GUI Application Controller
-      <ul style="list-style: disc; padding-left: 20px; color: #8A8FA8;">
+    <h4><code>main.py</code> — GUI Application Controller</h4>
+      <p><ul style="list-style: disc; padding-left: 20px; color: #8A8FA8;">
         <li></li>
       </ul>
-    </p>
+      </p>
     
     <h3 style="margin-top:28px;margin-bottom:10px">Key specs</h3>
     <div class="spec">
