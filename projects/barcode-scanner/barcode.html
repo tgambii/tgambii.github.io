@@ -381,7 +381,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
 <p>The application is split into four modules, each owning a single layer of responsibility. Data flows top-to-bottom: SAP API → barcode generation → GUI controller → Excel export.</p>
 <br>
     
-    <h4 style="margin-top:10px;margin-bottom:10px"><code>sap_api.py</code> — SAP Integration Layer</h4>
+    <h4>1 — <code>sap_api.py</code> — SAP Integration Layer</h4>
       <p><ul style="list-style: disc; padding-left: 20px; color: #8A8FA8;">
         <li>Loads credentials from a <code>.env</code> file using <code>python-dotenv</code>, keeping secrets out of source control.</li>
         <li>Issues an authenticated HTTP GET to a SAP REST endpoint using <code>HTTPBasicAuth</code>.</li>
@@ -390,14 +390,14 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
       </ul>
       </p>
 <br>
-    <h4 style="margin-top:10px;margin-bottom:10px"><code>replace_letters.py</code> — Encoding Utility</h4>
+    <h4>2 — <code>replace_letters.py</code> — Encoding Utility</h4>
       <p><ul style="list-style: disc; padding-left: 20px; color: #8A8FA8;">
         <li>A pure, stateless function that maps alphabetic characters in a part number prefix to their positional equivalents (A→01, B→02, … Z→26).</li>
         <li>This is the key transformation that converts human-readable SAP part number segments into an all-numeric string, a prerequisite for EAN-13 barcode generation.</li>
       </ul>
       </p>
 <br>  
-    <h4 style="margin-top:10px;margin-bottom:10px"><code>barcode_map.py</code> — EAN-13 Generation & Data Model</h4>
+    <h4>3 — <code>barcode_map.py</code> — EAN-13 Generation & Data Model</h4>
       <p>This is the computational core of the application. It executes at import time, building all lookup structures the GUI depends on. It calls <code>get_material_numbers()</code> to fetch live SAP data (or uses fallback <code>MANUAL_PARTS</code> list).
         <br><br>Parts at Curtiss-Wright follow a consistent naming convention: <code>TCG-HL-{PREFIX}-{NUMBER}</code>. The barcode generation 
       algorithm converts the letter prefix to a numeric sequence, concatenates it with the 4 digit number, pads the result to 12 digits, and calculates a valid EAN-13 check digit — making the output scannable by any standard USB barcode reader. The first two parts of the naming convention are the same across all part number, and only the prefix and number designate the part.</p>
@@ -414,7 +414,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
       </div>
     </p>
 <br>
-    <h4 style="margin-top:10px;margin-bottom:10px"><code>main.py</code> — GUI Application Controller</h4>
+    <h4>4 — <code>main.py</code> — GUI Application Controller</h4>
       <p><ul style="list-style: disc; padding-left: 20px; color: #8A8FA8;">
         <li></li>
       </ul>
