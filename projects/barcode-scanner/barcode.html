@@ -382,7 +382,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
 <br>
     
     <p><code>sap_api.py</code> — SAP Integration Layer
-      <ul>
+      <ul>{list-style: disc; padding-left: 20px; color: #8A8FA8;}
         <li>Loads credentials from a <code>.env</code> file using <code>python-dotenv</code>, keeping secrets out of source control.</li>
         <li>Issues an authenticated HTTP GET to a SAP REST endpoint using <code>HTTPBasicAuth</code>.</li>
         <li>Parses a JSON array response and extracts <code>MaterialNumber</code> fields, returning a flat <code>list[str]</code>.</li>
@@ -391,7 +391,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
     </p>
 <br>
     <p><code>replace_letters.py</code> — Encoding Utility
-      <ul>
+      <ul>{list-style: disc; padding-left: 20px; color: #8A8FA8;}
         <li>A pure, stateless function that maps alphabetic characters in a part number prefix to their positional equivalents (A→01, B→02, … Z→26).</li>
         <li>This is the key transformation that converts human-readable SAP part number segments into an all-numeric string, a prerequisite for EAN-13 barcode generation.</li>
       </ul>
@@ -415,7 +415,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
     </p>
 <br>
     <p><code>main.py</code> — GUI Application Controller
-      <ul>
+      <ul>{list-style: disc; padding-left: 20px; color: #8A8FA8;}
         <li></li>
       </ul>
     </p>
