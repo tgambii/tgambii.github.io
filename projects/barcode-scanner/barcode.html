@@ -355,7 +355,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
 <!-- TECHNICAL -->
 <section id="technical">
   <div class="wrap">
-    <div class="eyebrow">Technical breakdown</div>
+    <div class="eyebrow">Technical Breakdown</div>
     <h2>How it Works.</h2>
     <div class="rule"></div>
     <h3 style="margin-top:28px;margin-bottom:10px">Architecture</h3>
@@ -379,7 +379,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
 
 <h3 style="margin-top:28px;margin-bottom:10px">Module Breakdown</h3>
 <p>The application is split into four modules, each owning a single layer of responsibility. Data flows top-to-bottom: SAP API → barcode generation → GUI controller → Excel export.</p>
-<div class="rule"></div>
+<br>
     
     <p><code>sap_api.py</code> — SAP Integration Layer
       <ul>
@@ -399,7 +399,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
 <br>  
     <p><code>barcode_map.py</code> — EAN-13 Generation & Data Model
       <p>This is the computational core of the application. It executes at import time, building all lookup structures the GUI depends on. It calls <code>get_material_numbers()</code> to fetch live SAP data (or uses fallback <code>MANUAL_PARTS</code> list).
-        <br>Parts at Curtiss-Wright follow a consistent naming convention: <code>TCG-HL-{PREFIX}-{NUMBER}</code>. The barcode generation 
+        <br><br>Parts at Curtiss-Wright follow a consistent naming convention: <code>TCG-HL-{PREFIX}-{NUMBER}</code>. The barcode generation 
       algorithm converts the letter prefix to a numeric sequence, concatenates it with the 4 digit number, pads the result to 12 digits, and calculates a valid EAN-13 check digit — making the output scannable by any standard USB barcode reader. The first two parts of the naming convention are the same across all part number, and only the prefix and number designate the part.</p>
       <div class="code-block">
         <span class="cm"># EAN-13 generation — convert SAP P/N to a scannable barcode</span><br>
