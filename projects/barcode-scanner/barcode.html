@@ -236,6 +236,12 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
     <h2>The Problem.</h2>
     <div class="rule"></div>
     <p class="lead" style="max-width:100%">Tracking which parts are pulled from the hardware lab for each build required manually cross-referencing a physical parts list, looking up SAP material numbers, and entering quantities into a spreadsheet by hand.It was slow, error-prone, and entirely dependent on an assembler knowing the SAP part numbering system by memory. The goal was to replace that process with a barcode scanner — scan the label on a bin, get the SAP part number instantly, see a photo of the part for visual confirmation, enter a quantity, and export a clean report at end of a build.</p>
+    <div class="cards c4" style="margin-top:28px">
+      <div class="card"><div class="card-icon"></div><div class="card-title">Barcode resolution</div><div class="card-desc">USB scanner input matched against a built EAN-13 lookup table to return the SAP part number instantly.</div></div>
+      <div class="card"><div class="card-icon"></div><div class="card-title">Part image display</div><div class="card-desc">On match, the app loads that specific <code>SAP_PN.png</code> from a local folder for visual confirmation before quantity is committed.</div></div>
+      <div class="card"><div class="card-icon"></div><div class="card-title">Excel export</div><div class="card-desc">Quantities are written to a formatted <code>.xlsx</code> file named after the build number, ready for SAP entry.</div></div>
+      <div class="card"><div class="card-icon"></div><div class="card-title">SAP API hook</div><div class="card-desc">Architecture supports live Material Master fetching via SAP OData REST API with secure credential management.</div></div>
+    </div>
   </div>
 </section>
 
@@ -365,13 +371,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
                     <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="nu">12</span>))<br></div>
 <div style="margin-left: 20px;">check     = <span class="fn">str</span>((<span class="nu">10</span> - (total_sum % <span class="nu">10</span>)) % <span class="nu">10</span>)<br></div>
 <div style="margin-left: 20px;"><span class="kw">return</span> barcode + check</div>
-    </div>
-
-<div class="cards c4" style="margin-top:28px">
-      <div class="card"><div class="card-icon"></div><div class="card-title">Barcode resolution</div><div class="card-desc">USB scanner input matched against a built EAN-13 lookup table to return the SAP part number instantly.</div></div>
-      <div class="card"><div class="card-icon"></div><div class="card-title">Part image display</div><div class="card-desc">On match, the app loads that specific <code>SAP_PN.png</code> from a local folder for visual confirmation before quantity is committed.</div></div>
-      <div class="card"><div class="card-icon"></div><div class="card-title">Excel export</div><div class="card-desc">Quantities are written to a formatted <code>.xlsx</code> file named after the build number, ready for SAP entry.</div></div>
-      <div class="card"><div class="card-icon"></div><div class="card-title">SAP API hook</div><div class="card-desc">Architecture supports live Material Master fetching via SAP OData REST API with secure credential management.</div></div>
     </div>
     
     <h3 style="margin-top:28px;margin-bottom:10px">File structure</h3>
