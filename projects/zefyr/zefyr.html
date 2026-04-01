@@ -59,13 +59,8 @@ strong{font-weight:600;color:var(--text)}
 /* DECK */
 .deck-btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;border:none;border-radius:6px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;transition:.15s;margin-bottom:14px}
 .deck-btn:hover{background:#163d85}
-.deck-row{display:none;gap:16px;align-items:stretch;margin-bottom:14px}
-.deck-embed{border:1px solid var(--border);border-radius:8px;overflow:hidden;flex:1;min-width:0}
-.deck-embed iframe{width:100%;height:100%;min-height:580px;border:none;display:block}
-.deck-photo-col{width:260px;flex-shrink:0;display:flex;flex-direction:column}
-.deck-photo-frame{flex:1;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--bg3);display:flex;align-items:center;justify-content:center}
-.deck-photo-frame img{width:100%;height:100%;object-fit:cover;display:block}
-.deck-photo-caption{font-size:11px;color:var(--light);text-align:center;margin-top:8px;letter-spacing:.02em}
+.deck-embed{display:none;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:14px}
+.deck-embed iframe{width:100%;height:580px;border:none;display:block}
 
 /* CARDS */
 .cards{display:grid;gap:14px;margin:16px 0}
@@ -147,6 +142,15 @@ td{padding:8px 11px;border-bottom:1px solid var(--border);vertical-align:middle}
 tr.hl td{background:#dde8f8;font-weight:600}
 .ck{color:var(--accent2);font-weight:700}.cx{color:#c0392b}.cp{color:var(--warn)}
 
+/* ARCH FIGURE */
+.arch-layout{display:flex;gap:24px;align-items:stretch;border-top:1px solid var(--border)}
+.arch-list{flex:1;min-width:0}
+.arch-figure{flex:0 0 260px;display:flex;flex-direction:column}
+.arch-img-wrap{flex:1;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--bg3);display:flex;align-items:center;justify-content:center;min-height:0}
+.arch-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.arch-caption{font-size:11px;color:var(--light);text-align:center;margin-top:7px;font-style:italic;letter-spacing:.01em}
+@media(max-width:760px){.arch-layout{flex-direction:column}.arch-figure{flex:0 0 auto}.arch-img-wrap{height:200px}}
+
 /* PHOTO */
 .hero-photo-wrap{width:100%;aspect-ratio:1;border-radius:10px;border:1px solid var(--border);background:var(--bg3);overflow:hidden;display:flex;align-items:center;justify-content:center}
 .hero-photo-wrap img{width:100%;height:100%;object-fit:contain}
@@ -163,9 +167,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:24px 0;t
   .stat-item{border-right:none;padding-right:0}
   .ft{grid-template-columns:1fr 1fr}
   .pd{grid-template-columns:2fr 1fr 1fr}
-  .deck-row{flex-direction:column}
-  .deck-photo-col{width:100%}
-  .deck-photo-frame{min-height:220px}
 }
 @media(max-width:500px){
   .wrap{padding:0 18px}
@@ -227,17 +228,8 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:24px 0;t
     <h2>The full product breakdown.</h2>
     <div class="rule"></div>
     <button class="deck-btn" id="deckBtn" onclick="toggleDeck()">▶ &nbsp;Launch interactive pitch deck</button>
-    <div class="deck-row" id="deckRow">
-      <div class="deck-embed">
-        <iframe id="deckFrame" src="" allowfullscreen></iframe>
-      </div>
-      <div class="deck-photo-col">
-        <div class="deck-photo-frame">
-          <img src="images/system-architecture.jpg" alt="Rough system architecture"
-            onerror="this.style.display='none';this.parentNode.innerHTML+='<div style=\'text-align:center;color:var(--light);padding:24px\'><div style=\'font-size:32px;margin-bottom:8px\'>🔧</div><div style=\'font-size:11px;line-height:1.5\'>system-architecture.jpg</div></div>'"/>
-        </div>
-        <div class="deck-photo-caption">Rough system architecture.</div>
-      </div>
+    <div class="deck-embed" id="deckEmbed">
+      <iframe id="deckFrame" src="" allowfullscreen></iframe>
     </div>
   </div>
 </section>
@@ -305,15 +297,24 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:24px 0;t
     </div>
     <h3 style="margin-top:28px;margin-bottom:4px">Sub-assembly architecture</h3>
     <p style="font-size:13px;color:var(--light);margin-bottom:8px">Airflow path: Room air → Low grilles → Pre-mesh → HEPA H13 → Carbon/KMnO₄ → UV-C → Desiccant rotor → Blower → Clean dry air upward. Separate regen loop exhausts moisture via rear port — the two airstreams never mix.</p>
-    <div style="border-top:1px solid var(--border)">
-      <div class="sa"><div class="sa-l">A</div><div><div class="sa-n">Air outlet + LED status ring</div><div class="sa-d">Angled top cap · upward discharge · RGB ring shifts red → blue/green as RH improves</div></div></div>
-      <div class="sa"><div class="sa-l">B</div><div><div class="sa-n">Control panel</div><div class="sa-d">Single-button · three-mode selector · filter life LED driven by ΔP sensor</div></div></div>
-      <div class="sa"><div class="sa-l">C</div><div><div class="sa-n">Centrifugal blower + EC motor</div><div class="sa-d">Forward-curved · variable speed · maintains 300 CFM as filter resistance builds · motor in airstream</div></div></div>
-      <div class="sa"><div class="sa-l">D</div><div><div class="sa-n">Desiccant rotor module</div><div class="sa-d">10–12" silica rotor · 75% process / 25% regen split · 10,000+ hr rated</div></div></div>
-      <div class="sa"><div class="sa-l">E</div><div><div class="sa-n">3-stage filtration stack + UV-C</div><div class="sa-d">Pre-mesh → HEPA H13 (14"×16") → Carbon/KMnO₄ (2" bed) → UV-C LED · colour-coded cartridges</div></div></div>
-      <div class="sa"><div class="sa-l">F</div><div><div class="sa-n">360° low-level intake grilles</div><div class="sa-d">Side-mounted louvers · 250–300 in² free area · captures floor-level odours and spores</div></div></div>
-      <div class="sa"><div class="sa-l">G</div><div><div class="sa-n">Moisture exhaust port + wheel base</div><div class="sa-d">Rear 4" port · 3-ft flex hose · 2× rollerblade wheels · reed switch interlock on filter door</div></div></div>
-      <div class="sa" style="border-bottom:none"><div class="sa-l">H</div><div><div class="sa-n">Differential pressure sensor</div><div class="sa-d">Mounted in plenum · real-time filter load monitoring · drives LED alert · resets after replacement</div></div></div>
+    <div class="arch-layout">
+      <div class="arch-list">
+        <div class="sa"><div class="sa-l">A</div><div><div class="sa-n">Air outlet + LED status ring</div><div class="sa-d">Angled top cap · upward discharge · RGB ring shifts red → blue/green as RH improves</div></div></div>
+        <div class="sa"><div class="sa-l">B</div><div><div class="sa-n">Control panel</div><div class="sa-d">Single-button · three-mode selector · filter life LED driven by ΔP sensor</div></div></div>
+        <div class="sa"><div class="sa-l">C</div><div><div class="sa-n">Centrifugal blower + EC motor</div><div class="sa-d">Forward-curved · variable speed · maintains 300 CFM as filter resistance builds · motor in airstream</div></div></div>
+        <div class="sa"><div class="sa-l">D</div><div><div class="sa-n">Desiccant rotor module</div><div class="sa-d">10–12" silica rotor · 75% process / 25% regen split · 10,000+ hr rated</div></div></div>
+        <div class="sa"><div class="sa-l">E</div><div><div class="sa-n">3-stage filtration stack + UV-C</div><div class="sa-d">Pre-mesh → HEPA H13 (14"×16") → Carbon/KMnO₄ (2" bed) → UV-C LED · colour-coded cartridges</div></div></div>
+        <div class="sa"><div class="sa-l">F</div><div><div class="sa-n">360° low-level intake grilles</div><div class="sa-d">Side-mounted louvers · 250–300 in² free area · captures floor-level odours and spores</div></div></div>
+        <div class="sa"><div class="sa-l">G</div><div><div class="sa-n">Moisture exhaust port + wheel base</div><div class="sa-d">Rear 4" port · 3-ft flex hose · 2× rollerblade wheels · reed switch interlock on filter door</div></div></div>
+        <div class="sa" style="border-bottom:none"><div class="sa-l">H</div><div><div class="sa-n">Differential pressure sensor</div><div class="sa-d">Mounted in plenum · real-time filter load monitoring · drives LED alert · resets after replacement</div></div></div>
+      </div>
+      <figure class="arch-figure">
+        <div class="arch-img-wrap">
+          <img src="../zefyr/zefyr-arch.png" alt="Rough system architecture"
+               onerror="this.style.display='none';this.parentNode.innerHTML+='<div style=\'text-align:center;color:var(--light);padding:20px\'><div style=\'font-size:28px;margin-bottom:8px\'>📐</div><div style=\'font-size:11px;line-height:1.5\'>Add architecture image<br><code style=\'font-size:10px\'>zefyr/zefyr-arch.png</code></div></div>'"/>
+        </div>
+        <figcaption class="arch-caption">Rough system architecture.</figcaption>
+      </figure>
     </div>
   </div>
 </section>
@@ -473,17 +474,17 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:24px 0;t
 <script>
 let deckOpen=false;
 function toggleDeck(){
-  const row=document.getElementById('deckRow');
+  const embed=document.getElementById('deckEmbed');
   const frame=document.getElementById('deckFrame');
   const btn=document.getElementById('deckBtn');
   deckOpen=!deckOpen;
   if(deckOpen){
     frame.src='pitch-deck.html';
-    row.style.display='flex';
+    embed.style.display='block';
     btn.innerHTML='◼ &nbsp;Close pitch deck';
-    row.scrollIntoView({behavior:'smooth',block:'start'});
+    embed.scrollIntoView({behavior:'smooth',block:'start'});
   } else {
-    row.style.display='none';
+    embed.style.display='none';
     frame.src='';
     btn.innerHTML='▶ &nbsp;Launch interactive pitch deck';
   }
