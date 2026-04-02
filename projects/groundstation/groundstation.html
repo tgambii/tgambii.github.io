@@ -1,1 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Terminal Housing Case — Tyler Gamble</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--bg2:#f6f6f3;--bg3:#eeeeea;
+  --text:#1a1a1a;--muted:#555;--light:#888;
+  --accent:#1a4fa8;--accent2:#0e7a5e;
+  --border:#dededd;--warn:#8a560a;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Helvetica Neue',Arial,sans-serif;font-size:15px;line-height:1.7;color:var(--text);background:var(--bg)}
+a{color:var(--accent)}
 
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.97);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1040px;margin:0 auto;padding:0 32px;display:flex;align-items:center;height:50px;overflow-x:auto}
+.nav-inner::-webkit-scrollbar{display:none}
+.nav-home{font-size:13px;font-weight:700;color:var(--text);text-decoration:none;padding-right:16px;border-right:1px solid var(--border);margin-right:4px;white-space:nowrap;flex-shrink:0}
+.nav-home:hover{color:var(--accent)}
+.nav-link{font-size:12px;color:var(--light);padding:0 11px;white-space:nowrap;flex-shrink:0;text-decoration:none;transition:color .15s}
+.nav-link:hover{color:var(--text)}
+
+/* LAYOUT */
+.wrap{max-width:1040px;margin:0 auto;padding:0 32px}
+section{padding:64px 0;border-bottom:1px solid var(--border)}
+section:last-of-type{border-bottom:none}
+section.tinted{background:var(--bg2)}
+
+/* TYPE */
+h2{font-size:26px;font-weight:700;letter-spacing:-.01em;color:var(--text);margin-bottom:6px}
+h3{font-size:16px;font-weight:600;color:var(--text);margin-bottom:5px}
+h4{font-size:11px;font-weight:600;color:var(--light);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+p{margin-bottom:10px;color:var(--muted)}
+ul,ol{margin:6px 0 10px 18px}
+li{margin-bottom:4px;color:var(--muted)}
+strong{font-weight:600;color:var(--text)}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.lead{font-size:16px;color:var(--muted);line-height:1.65}
+.rule{width:32px;height:2px;background:var(--accent);border-radius:2px;margin:12px 0 20px}
+
+/* HERO */
+.hero{background:var(--bg2);padding:64px 0 56px;border-bottom:1px solid var(--border)}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--muted);margin-bottom:14px}
+.hero-title{font-size:42px;font-weight:800;letter-spacing:-.02em;line-height:1.05;color:var(--text);margin-bottom:4px}
+.hero-sub{font-size:16px;color:var(--muted);max-width:640px;margin-top:10px;line-height:1.65}
+.hero-meta{display:flex;gap:24px;margin-top:20px;flex-wrap:wrap}
+.hero-meta-item .lbl{font-size:10px;color:var(--light);text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px}
+.hero-meta-item .val{font-size:13px;font-weight:600;color:var(--text)}
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px}
+.tag{display:inline-block;font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:#fff;border:1px solid var(--border);color:var(--muted)}
+
+/* IMPACT STRIP */
+.impact-strip{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:28px;background:#fff}
+.impact-item{padding:18px 20px;border-right:1px solid var(--border)}
+.impact-item:last-child{border-right:none}
+.impact-num{font-size:24px;font-weight:800;color:var(--accent);letter-spacing:-.02em;line-height:1}
+.impact-label{font-size:11px;color:var(--light);margin-top:4px;line-height:1.4}
+
+/* CARDS */
+.cards{display:grid;gap:14px;margin:16px 0}
+.cards.c2{grid-template-columns:1fr 1fr}
+.cards.c3{grid-template-columns:repeat(3,1fr)}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px}
+.card-icon{font-size:20px;margin-bottom:8px}
+.card-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px}
+.card-desc{font-size:12px;color:var(--muted);line-height:1.5;margin:0}
+
+/* GALLERY */
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}
+.gallery-wide{grid-column:span 2}
+.asset-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.asset-thumb{height:200px;background:var(--bg3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;border-bottom:1px solid var(--border)}
+.asset-thumb.tall{height:292px}
+.asset-badge{position:absolute;top:8px;left:8px;font-size:10px;font-weight:600;padding:2px 8px;border-radius:12px;letter-spacing:.03em}
+.badge-cad{background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe}
+.badge-drawing{background:#dcfce7;color:#166534;border:1px solid #bbf7d0}
+.badge-photo{background:#fef9c3;color:#854d0e;border:1px solid #fde68a}
+.badge-exploded{background:#ede9fe;color:#5b21b6;border:1px solid #ddd6fe}
+.badge-field{background:#fce7f3;color:#9d174d;border:1px solid #fbcfe8}
+.asset-placeholder{font-size:11px;color:var(--light);text-align:center;line-height:1.7;padding:0 16px}
+.asset-info{padding:11px 13px}
+.asset-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px}
+.asset-desc{font-size:11px;color:var(--muted);line-height:1.5;margin:0}
+
+/* SPEC TABLE */
+.spec{display:grid;grid-template-columns:200px 1fr;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:14px 0;font-size:13px}
+.spec-row{display:contents}
+.spec-row>div{padding:7px 13px;border-bottom:1px solid var(--border)}
+.spec-row>div:first-child{background:var(--bg2);font-size:12px;color:var(--light);font-weight:500}
+.spec-row:last-child>div{border-bottom:none}
+
+/* PDM FLOW */
+.pdm-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:20px 24px;margin-top:20px}
+.pdm-flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.pdm-node{background:#fff;border:1px solid var(--border);border-radius:6px;padding:6px 14px;font-size:12px;font-weight:600;color:var(--text);white-space:nowrap}
+.pdm-node.accent{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pdm-node.dim{color:var(--muted);font-weight:400;font-size:11px}
+.pdm-arrow{font-size:13px;color:var(--light);flex-shrink:0}
+.pdm-types{display:flex;gap:8px;flex-wrap:wrap;padding-top:14px;border-top:1px solid var(--border)}
+
+/* TIMELINE */
+.tl{display:flex;flex-direction:column;margin:14px 0}
+.tl-item{display:flex;gap:14px;padding-bottom:18px;position:relative}
+.tl-item:not(:last-child)::after{content:'';position:absolute;left:12px;top:26px;bottom:0;width:1px;background:var(--border)}
+.tl-dot{width:26px;height:26px;border-radius:50%;background:#fff;border:2px solid var(--accent);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--accent)}
+.tl-phase{font-size:10px;color:var(--accent);font-weight:600;letter-spacing:.07em;text-transform:uppercase}
+.tl-title{font-size:13px;font-weight:600;margin:2px 0;color:var(--text)}
+.tl-desc{font-size:12px;color:var(--light);line-height:1.5}
+
+/* DISCIPLINE GRID */
+.discipline-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}
+.disc-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 18px}
+.disc-label{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:5px}
+.disc-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:10px}
+.disc-list{list-style:none;margin:0;padding:0}
+.disc-list li{font-size:12px;color:var(--muted);padding:4px 0;border-bottom:1px solid var(--border);line-height:1.4;display:flex;align-items:flex-start;gap:8px}
+.disc-list li:last-child{border-bottom:none}
+.disc-list li::before{content:'';display:block;width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:7px}
+
+/* FOOTER */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;text-align:center}
+.f-logo{font-size:14px;font-weight:700;color:var(--text);margin-bottom:5px}
+.f-logo span{color:var(--accent)}
+.f-sub{font-size:12px;color:var(--light);margin-bottom:12px}
+.f-links{display:flex;justify-content:center;gap:18px;flex-wrap:wrap}
+.f-link{font-size:12px;color:var(--light);text-decoration:none}
+.f-link:hover{color:var(--text)}
+
+@media(max-width:800px){
+  .impact-strip{grid-template-columns:1fr 1fr}
+  .impact-item:nth-child(2){border-right:none}
+  .impact-item:nth-child(3){border-top:1px solid var(--border)}
+  .impact-item:nth-child(4){border-top:1px solid var(--border);border-right:none}
+  .gallery{grid-template-columns:1fr 1fr}
+  .gallery-wide{grid-column:span 1}
+  .asset-thumb.tall{height:200px}
+  .discipline-grid{grid-template-columns:1fr 1fr}
+  .cards.c3{grid-template-columns:1fr 1fr}
+  .hero-title{font-size:30px}
+}
+@media(max-width:520px){
+  .wrap{padding:0 18px}
+  section{padding:48px 0}
+  .impact-strip{grid-template-columns:1fr 1fr}
+  .gallery{grid-template-columns:1fr}
+  .gallery-wide{grid-column:span 1}
+  .discipline-grid,.cards.c2,.cards.c3{grid-template-columns:1fr}
+  .spec{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-home" href="https://tgambii.github.io">← Portfolio</a>
+    <a class="nav-link" href="#context">Context</a>
+    <a class="nav-link" href="#gallery">Gallery</a>
+    <a class="nav-link" href="#pdm">PDM & Data</a>
+    <a class="nav-link" href="#disciplines">Disciplines</a>
+    <a class="nav-link" href="#process">Process</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="wrap">
+    <div class="hero-tag">🔩 &nbsp;Curtiss-Wright · Defense & Aerospace</div>
+    <div class="hero-title">Terminal Housing Case</div>
+    <p class="hero-sub">A ground-up redesign of a mobile military radio enclosure — from blank-slate 3D model to field-deployed hardware. One engineer owned the full stack: CAD, drawings, PDM, BOM, vendor management, and field documentation.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><div class="lbl">Company</div><div class="val">Curtiss-Wright Defense Solutions</div></div>
+      <div class="hero-meta-item"><div class="lbl">Role</div><div class="val">Sole 3D Designer & PDM Administrator</div></div>
+      <div class="hero-meta-item"><div class="lbl">Type</div><div class="val">Military Hardware Redesign</div></div>
+      <div class="hero-meta-item"><div class="lbl">Sector</div><div class="val">Defense Ground Systems</div></div>
+    </div>
+    <div class="tag-row">
+      <span class="tag">Autodesk Inventor</span>
+      <span class="tag">Autodesk Vault PDM</span>
+      <span class="tag">GD&T / ASME Y14.5</span>
+      <span class="tag">SAP ERP</span>
+      <span class="tag">Sheet Metal Design</span>
+      <span class="tag">BOM Management</span>
+      <span class="tag">Vendor Coordination</span>
+      <span class="tag">Field Documentation</span>
+    </div>
+    <div class="impact-strip">
+      <div class="impact-item">
+        <div class="impact-num">1</div>
+        <div class="impact-label">Engineer — sole designer across every deliverable</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-num">↓</div>
+        <div class="impact-label">Significant reduction in field installation time</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-num">0</div>
+        <div class="impact-label">Engineering support needed on-site to install</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-num">Full</div>
+        <div class="impact-label">PDM system built and administered from scratch</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTEXT -->
+<section id="context">
+  <div class="wrap">
+    <div class="eyebrow">Background</div>
+    <h2>Why It Was Redesigned.</h2>
+    <div class="rule"></div>
+    <p class="lead">The original terminal housing case required on-site engineering presence to install — a hard constraint for a product designed to deploy in the field. Assembly relied on undocumented institutional knowledge, installation times were long, and there was no formal system tracking design files or revisions.</p>
+    <p style="margin-top:10px">The redesign ran three parallel tracks: better hardware geometry, a proper PDM infrastructure built from nothing, and documentation clear enough that a non-technical assembler could complete a full installation remotely without any engineering support.</p>
+    <div class="cards c3" style="margin-top:28px">
+      <div class="card">
+        <div class="card-icon">🏗️</div>
+        <div class="card-title">Better hardware</div>
+        <div class="card-desc">Redesigned geometry to improve production efficiency, reduce unnecessary complexity, and cut field installation time significantly over the original.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🗂️</div>
+        <div class="card-title">Data infrastructure</div>
+        <div class="card-desc">No PDM existed before this project. Autodesk Vault was implemented from scratch — giving the team structured version control, release workflows, and shared file access for the first time.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">📖</div>
+        <div class="card-title">Field-deployable documentation</div>
+        <div class="card-desc">Comprehensive illustrated assembly procedures enabled remote installations without any engineering support on-site — a first for this product line.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="tinted" id="gallery">
+  <div class="wrap">
+    <div class="eyebrow">Design Work</div>
+    <h2>CAD, Drawings & Hardware.</h2>
+    <div class="rule"></div>
+    <p>The full design package spans parametric 3D models, GD&T production drawings, exploded assembly views, and as-built photography. Drawings have been reviewed for export compliance — sensitive dimensions and part numbers are redacted where applicable.</p>
+
+    <div class="gallery">
+      <div class="asset-card gallery-wide">
+        <div class="asset-thumb tall">
+          <span class="asset-badge badge-cad">CAD Model</span>
+          <img src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none"/>
+          <div class="asset-placeholder">📦<br><br>Insert primary isometric assembly render<br><span style="font-size:10px;color:var(--light)">Full assembly · enclosure · mounting provisions · internal clearances</span></div>
+        </div>
+        <div class="asset-info">
+          <div class="asset-title">Full assembly — isometric view</div>
+          <div class="asset-desc">Top-level parametric assembly showing enclosure geometry, mounting provisions, connector locations, and internal component clearances. All parts modeled from scratch in Autodesk Inventor.</div>
+        </div>
+      </div>
+
+      <div class="asset-card">
+        <div class="asset-thumb tall">
+          <span class="asset-badge badge-exploded">Exploded View</span>
+          <img src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none"/>
+          <div class="asset-placeholder">💥<br><br>Insert exploded<br>assembly render<br><span style="font-size:10px;color:var(--light)">With BOM callout bubbles</span></div>
+        </div>
+        <div class="asset-info">
+          <div class="asset-title">Exploded view — BOM callouts</div>
+          <div class="asset-desc">Used directly in the field assembly guide. Part callouts tie back to SAP BOM entries and installation procedure steps.</div>
+        </div>
+      </div>
+
+      <div class="asset-card">
+        <div class="asset-thumb">
+          <span class="asset-badge badge-drawing">Engineering Drawing</span>
+          <img src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none"/>
+          <div class="asset-placeholder">📋<br>Insert detail drawing<br><span style="font-size:10px;color:var(--light)">Enclosure body · GD&T · tolerances</span></div>
+        </div>
+        <div class="asset-info">
+          <div class="asset-title">Detail drawing — enclosure body</div>
+          <div class="asset-desc">Fully toleranced per ASME Y14.5. GD&T on all critical mating interfaces, surface finish specs, and material/finish callouts.</div>
+        </div>
+      </div>
+
+      <div class="asset-card">
+        <div class="asset-thumb">
+          <span class="asset-badge badge-drawing">Engineering Drawing</span>
+          <img src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none"/>
+          <div class="asset-placeholder">📐<br>Insert assembly drawing<br><span style="font-size:10px;color:var(--light)">Top-level · sub-assembly callouts</span></div>
+        </div>
+        <div class="asset-info">
+          <div class="asset-title">Assembly drawing — top level</div>
+          <div class="asset-desc">Interface dimensions, sub-assembly callout balloons, and installation clearance zones. Formally released through Vault with full revision history.</div>
+        </div>
+      </div>
+
+      <div class="asset-card">
+        <div class="asset-thumb">
+          <span class="asset-badge badge-cad">CAD Model</span>
+          <img src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none"/>
+          <div class="asset-placeholder">✂️<br>Insert cross-section<br><span style="font-size:10px;color:var(--light)">Internal stack · connector routing</span></div>
+        </div>
+        <div class="asset-info">
+          <div class="asset-title">Cross-section — internal layout</div>
+          <div class="asset-desc">Section view exposing component stack, connector routing, and thermal clearance between PCB and enclosure wall.</div>
+        </div>
+      </div>
+
+      <div class="asset-card">
+        <div class="asset-thumb">
+          <span class="asset-badge badge-photo">Hardware Photo</span>
+          <img src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none"/>
+          <div class="asset-placeholder">📷<br>Insert as-built photo<br><span style="font-size:10px;color:var(--light)">Fabricated unit · final finish</span></div>
+        </div>
+        <div class="asset-info">
+          <div class="asset-title">As-built — fabricated unit</div>
+          <div class="asset-desc">Manufactured assembly against CAD design intent — final fit, finish, and hardware installation.</div>
+        </div>
+      </div>
+
+      <div class="asset-card">
+        <div class="asset-thumb">
+          <span class="asset-badge badge-field">Field Documentation</span>
+          <img src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none"/>
+          <div class="asset-placeholder">📖<br>Insert field guide sample page<br><span style="font-size:10px;color:var(--light)">Illustrated assembly procedure</span></div>
+        </div>
+        <div class="asset-info">
+          <div class="asset-title">Field assembly guide — sample page</div>
+          <div class="asset-desc">Illustrated step-by-step procedures written for non-technical assemblers. Enabled complete remote installation with zero engineering support.</div>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--light);margin-top:8px;text-align:center">Sensitive dimensions and part numbers redacted per export compliance review.</p>
+  </div>
+</section>
+
+<!-- PDM & DATA -->
+<section id="pdm">
+  <div class="wrap">
+    <div class="eyebrow">Infrastructure</div>
+    <h2>PDM, BOM & Data Ownership.</h2>
+    <div class="rule"></div>
+    <p>Before this project, no formal CAD data management system existed. Autodesk Vault was implemented from scratch as part of the THC redesign — creating the engineering data infrastructure the team now runs on. Managing it on an ongoing basis is part of the role.</p>
+
+    <div class="cards c2" style="margin-top:24px">
+      <div class="card">
+        <div class="card-icon">🗂️</div>
+        <div class="card-title">Autodesk Vault PDM — implemented & administered</div>
+        <div class="card-desc">Built the full system from zero: folder structure, file lifecycle states (Work In Progress → Released), formal check-in/check-out workflows, user access permissions, and revision history. Ongoing administration is a sole responsibility.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">📊</div>
+        <div class="card-title">SAP BOM — created & maintained</div>
+        <div class="card-desc">Multi-level bill of materials in SAP ERP covering the full assembly — part numbers, quantities, cost codes, and revision flags. Built during design and maintained through each ECO to keep production data current and accurate.</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:32px;margin-bottom:4px">File lifecycle — design to production release</h3>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:0">How every model, drawing, and document flows through Vault before reaching production:</p>
+    <div class="pdm-wrap">
+      <div class="pdm-flow">
+        <div class="pdm-node">Autodesk Inventor</div>
+        <div class="pdm-arrow">→</div>
+        <div class="pdm-node accent">Vault Check-In</div>
+        <div class="pdm-arrow">→</div>
+        <div class="pdm-node">Work In Progress</div>
+        <div class="pdm-arrow">→</div>
+        <div class="pdm-node">Review / ECO</div>
+        <div class="pdm-arrow">→</div>
+        <div class="pdm-node">Released</div>
+      </div>
+      <div class="pdm-types">
+        <div class="pdm-node dim">Parts (.ipt)</div>
+        <div class="pdm-node dim">Assemblies (.iam)</div>
+        <div class="pdm-node dim">Drawings (.idw)</div>
+        <div class="pdm-node dim">PDFs</div>
+        <span style="font-size:11px;color:var(--light);align-self:center;margin-left:4px">— all revision-tracked in Vault</span>
+      </div>
+    </div>
+
+    <h3 style="margin-top:32px;margin-bottom:12px">Project data at a glance</h3>
+    <div class="spec">
+      <div class="spec-row"><div>CAD software</div><div>Autodesk Inventor — parametric part and assembly modeling</div></div>
+      <div class="spec-row"><div>PDM system</div><div>Autodesk Vault — implemented, configured, and administered by sole engineer</div></div>
+      <div class="spec-row"><div>Drawing standard</div><div>ASME Y14.5 — GD&T on all critical mating and interface features</div></div>
+      <div class="spec-row"><div>ERP / BOM</div><div>SAP — multi-level BOM, part numbers, cost tracking, ECO revision flags</div></div>
+      <div class="spec-row"><div>Vendor scope</div><div>RFQ, lead time coordination, and delivery management with fabricators</div></div>
+      <div class="spec-row"><div>Field documentation</div><div>Illustrated IPC-style assembly guide for non-technical field personnel</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- DISCIPLINES -->
+<section class="tinted" id="disciplines">
+  <div class="wrap">
+    <div class="eyebrow">Skill Coverage</div>
+    <h2>What This Project Spans.</h2>
+    <div class="rule"></div>
+    <p>Most projects demonstrate one or two engineering disciplines. This one required owning the complete pipeline — from 3D geometry through field deployment — as the sole design engineer on the project.</p>
+
+    <div class="discipline-grid">
+      <div class="disc-card">
+        <div class="disc-label">3D CAD</div>
+        <div class="disc-title">Parametric Modeling</div>
+        <ul class="disc-list">
+          <li>Multi-body part modeling in Autodesk Inventor</li>
+          <li>Top-down assembly design methodology</li>
+          <li>Sheet metal feature design and flat pattern</li>
+          <li>Configuration and hardware variant management</li>
+        </ul>
+      </div>
+      <div class="disc-card">
+        <div class="disc-label">Technical Drawings</div>
+        <div class="disc-title">Production Drawing Package</div>
+        <ul class="disc-list">
+          <li>GD&T per ASME Y14.5 on all critical interfaces</li>
+          <li>Detail, assembly, and installation drawings</li>
+          <li>Tolerance stack-up on mating features</li>
+          <li>ECO authoring and formal revision cycle management</li>
+        </ul>
+      </div>
+      <div class="disc-card">
+        <div class="disc-label">Data Management</div>
+        <div class="disc-title">Autodesk Vault PDM</div>
+        <ul class="disc-list">
+          <li>System implementation and configuration from scratch</li>
+          <li>Lifecycle state and release workflow setup</li>
+          <li>User access controls and permissions</li>
+          <li>Ongoing system administration and support</li>
+        </ul>
+      </div>
+      <div class="disc-card">
+        <div class="disc-label">Production & Supply</div>
+        <div class="disc-title">ERP, BOM & Vendors</div>
+        <ul class="disc-list">
+          <li>Multi-level BOM creation and maintenance in SAP</li>
+          <li>Part number, cost code, and quantity tracking</li>
+          <li>Vendor RFQ and fabrication coordination</li>
+          <li>Delivery timeline management for on-time completion</li>
+        </ul>
+      </div>
+      <div class="disc-card">
+        <div class="disc-label">Field Engineering</div>
+        <div class="disc-title">Deployment Documentation</div>
+        <ul class="disc-list">
+          <li>Illustrated assembly guide for non-technical assemblers</li>
+          <li>Step-by-step procedures with visual BOM callouts</li>
+          <li>Written and validated for zero-support remote install</li>
+          <li>Enabled successful remote installation on first attempt</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="wrap">
+    <div class="eyebrow">How It Came Together</div>
+    <h2>Design to Deployment.</h2>
+    <div class="rule"></div>
+    <p>PDM infrastructure was established before design work began — so every file, revision, and release had a formal home from day one. Design and data management ran in parallel throughout.</p>
+
+    <div class="cards c2" style="margin-top:24px">
+      <div>
+        <div class="tl">
+          <div class="tl-item">
+            <div class="tl-dot">1</div>
+            <div>
+              <div class="tl-phase">Requirements</div>
+              <div class="tl-title">Interface specs & design inputs</div>
+              <div class="tl-desc">Captured military radio interface requirements, environmental constraints, and installation workflow targets. Primary KPI: reduce field installation time and eliminate on-site engineering dependency.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">2</div>
+            <div>
+              <div class="tl-phase">Infrastructure</div>
+              <div class="tl-title">Autodesk Vault implementation</div>
+              <div class="tl-desc">Stood up the PDM system before design began — folder structure, lifecycle states, check-in/out discipline, and team permissions configured so every file is formally tracked from the first commit.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">3</div>
+            <div>
+              <div class="tl-phase">Concept Design</div>
+              <div class="tl-title">Layout generation & down-select</div>
+              <div class="tl-desc">Generated multiple configuration layouts in CAD. Down-selected on producibility, assembly access, and serviceability. Top-level interface dimensions locked before detail design began.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="tl">
+          <div class="tl-item">
+            <div class="tl-dot">4</div>
+            <div>
+              <div class="tl-phase">Detail Design</div>
+              <div class="tl-title">Full parametric 3D model</div>
+              <div class="tl-desc">Built the complete assembly — all detail parts, sheet metal components, and hardware. Revision discipline maintained in Vault throughout. SAP BOM entries created in parallel as parts were finalized.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">5</div>
+            <div>
+              <div class="tl-phase">Drawing Release</div>
+              <div class="tl-title">Production drawing package</div>
+              <div class="tl-desc">Authored detail, assembly, and installation drawings per ASME Y14.5 with GD&T on all critical interfaces. Managed ECO revision cycles through formal Vault release workflows.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">6</div>
+            <div>
+              <div class="tl-phase">Production & Deployment</div>
+              <div class="tl-title">Vendors, BOM & field documentation</div>
+              <div class="tl-desc">Coordinated fabrication vendors and delivery schedules for on-time completion. Authored the illustrated field assembly guide — enabling the first fully remote installation of this product.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="f-logo">Tyler<span>.</span></div>
+    <div class="f-sub">Mechanical Engineer · Boston, MA</div>
+    <div class="f-links">
+      <a class="f-link" href="https://tgambii.github.io">← Back to portfolio</a>
+      <a class="f-link" href="https://tgambii.github.io#projects">Projects</a>
+      <a class="f-link" href="https://tgambii.github.io#contact">Contact</a>
+      <a class="f-link" href="https://tgambii.github.io/images/resume.pdf" target="_blank">Resume</a>
+    </div>
+    <p style="font-size:11px;color:var(--border);margin-top:18px">© 2026 Tyler Gamble</p>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'})}
+  });
+});
+document.querySelectorAll('.asset-thumb img').forEach(img => {
+  if(img.getAttribute('src') && img.getAttribute('src').length > 0){
+    img.style.display = 'block';
+    const ph = img.closest('.asset-thumb').querySelector('.asset-placeholder');
+    if(ph) ph.style.display = 'none';
+  }
+});
+</script>
+</body>
+</html>
