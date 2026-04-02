@@ -238,7 +238,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
     <p class="lead" style="max-width:100%">Tracking which parts are pulled from the hardware lab for each build required manually cross-referencing a physical parts list, looking up SAP material numbers, and entering quantities into a spreadsheet by hand.It was slow, error-prone, and entirely dependent on an assembler knowing the SAP part numbering system by memory. The goal was to replace that process with a barcode scanner — scan the label on a bin, get the SAP part number instantly, see a photo of the part for visual confirmation, enter a quantity, and export a clean report at end of a build.</p>
     <div class="cards c4" style="margin-top:28px">
       <div class="card"><div class="card-icon"></div><div class="card-title">Barcode resolution</div><div class="card-desc">USB scanner input matched against a built EAN-13 lookup table to return the SAP part number instantly.</div></div>
-      <div class="card"><div class="card-icon"></div><div class="card-title">Part image display</div><div class="card-desc">On match, the app loads that specific <code>SAP_PN.png</code> from a local folder for visual confirmation before quantity is committed.</div></div>
+      <div class="card"><div class="card-icon"></div><div class="card-title">Part image display</div><div class="card-desc">On match, the app loads that specific <code>{SAP_PN}.png</code> from a local folder for visual confirmation before quantity is committed.</div></div>
       <div class="card"><div class="card-icon"></div><div class="card-title">Excel export</div><div class="card-desc">Quantities are written to a formatted <code>.xlsx</code> file named after the build number, ready for SAP entry.</div></div>
       <div class="card"><div class="card-icon"></div><div class="card-title">SAP API hook</div><div class="card-desc">Architecture supports live Material Master fetching via SAP OData REST API with secure credential management.</div></div>
     </div>
@@ -251,7 +251,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
     <div class="eyebrow">Application</div>
     <h2>The GUI.</h2>
     <div class="rule"></div>
-    <p>The GUI is built entirely with Python's native <code>tkinter</code> library — no external UI frameworks required. It follows a two-panel layout: a narrow left panel handles all scan inputs, and a wider right panel maintains a running log of scanned items. The left panel walks the operator through the workflow top to bottom — barcode entry, SAP part number readout, a live part image for visual confirmation, quantity input, and a submit button. The app loads the corresponding part image from the input as <code>SAP_PN.png</code> from a local folder. The right panel displays a scrollable table of everything scanned in the current session, with a single export button that writes the full parts list to a named Excel file as <code>BuildNumber.xlsx</code>.</p>
+    <p>The GUI is built entirely with Python's native <code>tkinter</code> library — no external UI frameworks required. It follows a two-panel layout: a narrow left panel handles all scan inputs, and a wider right panel maintains a running log of scanned items. The left panel walks the operator through the workflow top to bottom — barcode entry, SAP part number readout, a live part image for visual confirmation, quantity input, and a submit button. The app loads the corresponding part image from the input as <code>{SAP_PN}.png</code> from a local folder. The right panel displays a scrollable table of everything scanned in the current session, with a single export button that writes the full parts list to a named Excel file as <code>BuildNumber.xlsx</code>.</p>
 
     <div class="app-window">
 
@@ -370,7 +370,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
 <div style="margin-left: 20px;">├── <span class="fn">barcode_map.py</span>      <span class="cm"># EAN-13 generation + lookup table</span><br></div>
 <div style="margin-left: 20px;">├── <span class="fn">sap_api.py</span>          <span class="cm"># SAP Material Master API client</span><br></div>
 <div style="margin-left: 20px;">└── <span class="fn">replace_letters.py</span>  <span class="cm"># letter → digit encoder</span><br></div>
-├── <span class="path">Part Number Images/</span>     <span class="cm"># SAP_PN.png files</span><br>
+├── <span class="path">Part Number Images/</span>     <span class="cm"># {SAP_PN}.png files</span><br>
 <div style="margin-left: 20px;">├── <span class="fn">TCG-HL-KM-1008.png</span>  <span class="cm"># .pngs for visual confirmation embedded in GUI</span><br></div>
 <div style="margin-left: 20px;">└── <span class="fn">etc.</span><br></div>
 └── <span class="path">exports/</span>                <span class="cm"># auto-created on first export, .xlsx output</span><br>
@@ -420,7 +420,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
       <p><ul style="list-style: disc; padding-left: 20px; color: #8A8FA8;">
         <li><code>BarcodeScannerApp</code> subclasses <code>tk.Tk</code> and owns the full application lifecycle.</li>
         <li>Uses <code>tk.Label</code> widgets styled as buttons instead of <code>tk.Button</code> — this is an intentional workaround for macOS's Aqua theme, which overrides background/foreground colors on native button widgets, breaking the custom color scheme.</li>
-        <li>Scan flow: Entry widget captures barcode input (keyboard or USB HID scanner via Enter key binding) → O(1) dict lookup against <code>SAP_barcode_map</code> → updates SAP P/N label, loads part image from <code>Part Number Images/SAP_PN.png</code>, sets status.</li>
+        <li>Scan flow: Entry widget captures barcode input (keyboard or USB HID scanner via Enter key binding) → O(1) dict lookup against <code>SAP_barcode_map</code> → updates SAP P/N label, loads part image from <code>Part Number Images/{SAP_PN}.png</code>, sets status.</li>
         <li>Image rendering: PIL/Pillow is used to load, convert to RGBA, thumbnail-scale, and composite each part image onto a fixed-size canvas before converting to <code>ImageTk.PhotoImage</code>. The canvas approach preserves aspect ratio and keeps the UI consistent regardless of source image dimensions.</li>
         <li>Session state: <code>self.excel: dict[str, int]</code> accumulates SAP P/N → quantity, supporting additive scanning (scanning the same part twice increments its count).</li>
         <li>Export: Writes the session dict to a named Excel file (<code>exports/{BuildNumber}.xlsx</code>) using <code>openpyxl</code>, with cells explicitly styled as text format (<code>"@"</code>) to prevent Excel from cutting out the leading-zero barcodes. Then calls <code>print_map()</code> to refresh the barcode reference sheet.</li>
