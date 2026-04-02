@@ -381,7 +381,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
 <p>The application is split into four modules, each owning a single layer of responsibility. Data flows top-to-bottom: SAP API → barcode generation → GUI controller → Excel export.</p>
 <br>
     
-    <h4>1 — <code>sap_api.py</code> — SAP Integration Layer</h4>
+    <h4>1 — <code>sap_api.py</code> — SAP Integration</h4>
       <p><ul style="list-style: disc; padding-left: 20px; color: #8A8FA8;">
         <li>Loads credentials from a <code>.env</code> file using <code>python-dotenv</code>, keeping secrets out of source control.</li>
         <li>Issues an authenticated HTTP GET to a SAP REST endpoint using <code>HTTPBasicAuth</code>.</li>
