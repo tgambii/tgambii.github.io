@@ -74,16 +74,118 @@ strong{font-weight:600;color:var(--text)}
 .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}
 .gallery-wide{grid-column:span 2}
 .asset-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden}
-.asset-thumb{height:200px;background:var(--bg3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;border-bottom:1px solid var(--border)}
-.asset-thumb.tall{height:292px}
-.asset-badge{position:absolute;top:8px;left:8px;font-size:10px;font-weight:600;padding:2px 8px;border-radius:12px;letter-spacing:.03em}
+
+/* Thumb is now an <a> wrapping the entire picture window */
+a.asset-thumb{
+  display:block;
+  height:200px;
+  background:var(--bg3);
+  position:relative;
+  border-bottom:1px solid var(--border);
+  overflow:hidden;
+  text-decoration:none;
+  cursor:pointer;
+}
+a.asset-thumb.tall{height:292px}
+
+/* Full-bleed image — covers the entire window */
+a.asset-thumb img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:none; /* JS shows it when src is populated */
+  transition:transform .3s ease;
+}
+a.asset-thumb:hover img{transform:scale(1.03)}
+
+/* Placeholder shown when no image src yet */
+.asset-placeholder{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  font-size:11px;
+  color:var(--light);
+  text-align:center;
+  line-height:1.7;
+  padding:0 16px;
+}
+
+/* PDF preview tile — shown instead of <img> for PDF hrefs */
+.pdf-preview{
+  position:absolute;
+  inset:0;
+  display:none; /* JS sets to flex when href is a PDF and no img src */
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  background:#f0f4ff;
+}
+.pdf-preview-icon{font-size:36px;line-height:1}
+.pdf-preview-name{
+  font-size:11px;
+  font-weight:600;
+  color:var(--accent);
+  text-align:center;
+  padding:0 14px;
+  word-break:break-word;
+  line-height:1.4;
+}
+.pdf-preview-hint{font-size:10px;color:var(--light)}
+
+/* Hover overlay — appears on any populated thumb */
+.thumb-overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0);
+  display:flex;
+  align-items:flex-end;
+  justify-content:flex-end;
+  padding:10px;
+  transition:background .2s ease;
+  pointer-events:none;
+}
+a.asset-thumb:hover .thumb-overlay{background:rgba(0,0,0,.18)}
+.thumb-overlay-pill{
+  background:rgba(255,255,255,.92);
+  border:1px solid rgba(0,0,0,.08);
+  border-radius:20px;
+  font-size:11px;
+  font-weight:600;
+  color:var(--text);
+  padding:4px 10px;
+  opacity:0;
+  transform:translateY(4px);
+  transition:opacity .2s ease, transform .2s ease;
+  white-space:nowrap;
+}
+a.asset-thumb:hover .thumb-overlay-pill{opacity:1;transform:translateY(0)}
+
+/* Badge stays top-left over everything */
+.asset-badge{
+  position:absolute;
+  top:8px;
+  left:8px;
+  z-index:2;
+  font-size:10px;
+  font-weight:600;
+  padding:2px 8px;
+  border-radius:12px;
+  letter-spacing:.03em;
+}
 .badge-cad{background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe}
 .badge-drawing{background:#dcfce7;color:#166534;border:1px solid #bbf7d0}
 .badge-photo{background:#fef9c3;color:#854d0e;border:1px solid #fde68a}
 .badge-exploded{background:#ede9fe;color:#5b21b6;border:1px solid #ddd6fe}
 .badge-field{background:#fce7f3;color:#9d174d;border:1px solid #fbcfe8}
 .badge-technical{background:#facdb1;color:#b65321;border:1px solid #f7d6bb}
-.asset-placeholder{font-size:11px;color:var(--light);text-align:center;line-height:1.7;padding:0 16px}
+
 .asset-info{padding:11px 13px}
 .asset-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px}
 .asset-desc{font-size:11px;color:var(--muted);line-height:1.5;margin:0}
@@ -211,11 +313,13 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
 
     <div class="gallery">
       <div class="asset-card gallery-wide">
-        <div class="asset-thumb tall">
+        <a class="asset-thumb tall" href="assets/assembly-iso.png" target="_blank" rel="noopener">
           <span class="asset-badge badge-cad">CAD Model</span>
-          <img src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none"/>
+          <img src="assets/assembly-iso.png" alt="Full assembly isometric view"/>
+          <div class="pdf-preview"><div class="pdf-preview-icon">📄</div><div class="pdf-preview-name">assembly-iso.png</div><div class="pdf-preview-hint">Click to open</div></div>
           <div class="asset-placeholder">📦<br><br>Insert primary isometric assembly render<br><span style="font-size:10px;color:var(--light)">Full assembly · enclosure · mounting provisions · internal clearances</span></div>
-        </div>
+          <div class="thumb-overlay"><span class="thumb-overlay-pill">↗ Open</span></div>
+        </a>
         <div class="asset-info">
           <div class="asset-title">Full assembly — isometric view</div>
           <div class="asset-desc">Top-level parametric assembly showing enclosure geometry, mounting provisions, connector locations, and internal component clearances. All parts modeled from scratch in Autodesk Inventor.</div>
@@ -223,11 +327,13 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
       </div>
 
       <div class="asset-card">
-        <div class="asset-thumb tall">
+        <a class="asset-thumb tall" href="assets/exploded-view.png" target="_blank" rel="noopener">
           <span class="asset-badge badge-exploded">Exploded View</span>
-          <img src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none"/>
+          <img src="assets/exploded-view.png" alt="Exploded view BOM callouts"/>
+          <div class="pdf-preview"><div class="pdf-preview-icon">📄</div><div class="pdf-preview-name">exploded-view.png</div><div class="pdf-preview-hint">Click to open</div></div>
           <div class="asset-placeholder">💥<br><br>Insert exploded<br>assembly render<br><span style="font-size:10px;color:var(--light)">With BOM callout bubbles</span></div>
-        </div>
+          <div class="thumb-overlay"><span class="thumb-overlay-pill">↗ Open</span></div>
+        </a>
         <div class="asset-info">
           <div class="asset-title">Exploded view — BOM callouts</div>
           <div class="asset-desc">Used directly in the field assembly guide. Part callouts tie back to SAP BOM entries and installation procedure steps.</div>
@@ -235,11 +341,13 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
       </div>
 
       <div class="asset-card">
-        <div class="asset-thumb">
+        <a class="asset-thumb" href="assets/detail-drawing.pdf" target="_blank" rel="noopener">
           <span class="asset-badge badge-drawing">Engineering Drawing</span>
-          <img src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none"/>
+          <img src="assets/detail-drawing-preview.png" alt="Detail drawing enclosure body"/>
+          <div class="pdf-preview"><div class="pdf-preview-icon">📄</div><div class="pdf-preview-name">detail-drawing.pdf</div><div class="pdf-preview-hint">Click to open</div></div>
           <div class="asset-placeholder">📋<br>Insert detail drawing<br><span style="font-size:10px;color:var(--light)">Enclosure body · GD&T · tolerances</span></div>
-        </div>
+          <div class="thumb-overlay"><span class="thumb-overlay-pill">↗ Open PDF</span></div>
+        </a>
         <div class="asset-info">
           <div class="asset-title">Detail drawing — enclosure body</div>
           <div class="asset-desc">Fully toleranced per ASME Y14.5. GD&T on all critical mating interfaces, surface finish specs, and material/finish callouts.</div>
@@ -247,11 +355,13 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
       </div>
 
       <div class="asset-card">
-        <div class="asset-thumb">
+        <a class="asset-thumb" href="assets/assembly-drawing.pdf" target="_blank" rel="noopener">
           <span class="asset-badge badge-drawing">Engineering Drawing</span>
-          <img src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none"/>
+          <img src="assets/assembly-drawing-preview.png" alt="Assembly drawing top level"/>
+          <div class="pdf-preview"><div class="pdf-preview-icon">📄</div><div class="pdf-preview-name">assembly-drawing.pdf</div><div class="pdf-preview-hint">Click to open</div></div>
           <div class="asset-placeholder">📐<br>Insert assembly drawing<br><span style="font-size:10px;color:var(--light)">Top-level · sub-assembly callouts</span></div>
-        </div>
+          <div class="thumb-overlay"><span class="thumb-overlay-pill">↗ Open PDF</span></div>
+        </a>
         <div class="asset-info">
           <div class="asset-title">Assembly drawing — top level</div>
           <div class="asset-desc">Interface dimensions, sub-assembly callout balloons, and installation clearance zones. Formally released through Vault with full revision history.</div>
@@ -259,11 +369,13 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
       </div>
 
       <div class="asset-card">
-        <div class="asset-thumb">
+        <a class="asset-thumb" href="assets/cross-section.png" target="_blank" rel="noopener">
           <span class="asset-badge badge-cad">CAD Model</span>
-          <img src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none"/>
+          <img src="assets/cross-section.png" alt="Cross-section internal layout"/>
+          <div class="pdf-preview"><div class="pdf-preview-icon">📄</div><div class="pdf-preview-name">cross-section.png</div><div class="pdf-preview-hint">Click to open</div></div>
           <div class="asset-placeholder">✂️<br>Insert cross-section<br><span style="font-size:10px;color:var(--light)">Internal stack · connector routing</span></div>
-        </div>
+          <div class="thumb-overlay"><span class="thumb-overlay-pill">↗ Open</span></div>
+        </a>
         <div class="asset-info">
           <div class="asset-title">Cross-section — internal layout</div>
           <div class="asset-desc">Section view exposing component stack, connector routing, and thermal clearance between PCB and enclosure wall.</div>
@@ -271,11 +383,13 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
       </div>
 
       <div class="asset-card">
-        <div class="asset-thumb">
+        <a class="asset-thumb" href="assets/as-built-photo.jpg" target="_blank" rel="noopener">
           <span class="asset-badge badge-photo">Hardware Photo</span>
-          <img src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none"/>
+          <img src="assets/as-built-photo.jpg" alt="As-built fabricated unit"/>
+          <div class="pdf-preview"><div class="pdf-preview-icon">📷</div><div class="pdf-preview-name">as-built-photo.jpg</div><div class="pdf-preview-hint">Click to open</div></div>
           <div class="asset-placeholder">📷<br>Insert as-built photo<br><span style="font-size:10px;color:var(--light)">Fabricated unit · final finish</span></div>
-        </div>
+          <div class="thumb-overlay"><span class="thumb-overlay-pill">↗ Open</span></div>
+        </a>
         <div class="asset-info">
           <div class="asset-title">As-built — fabricated unit</div>
           <div class="asset-desc">Manufactured assembly against CAD design intent — final fit, finish, and hardware installation.</div>
@@ -283,11 +397,13 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
       </div>
 
       <div class="asset-card">
-        <div class="asset-thumb">
+        <a class="asset-thumb" href="Work Examples/Inspection Report - TCG-HL-TT-1051.pdf" target="_blank" rel="noopener">
           <span class="asset-badge badge-technical">Technical Documentation</span>
-          <img src="Work Examples/Inspection Report - TCG-HL-TT-1051.pdf" alt="" style="width:200%;height:200%;object-fit:contain;display:none"/>
+          <img src="assets/inspection-report-preview.png" alt="Quality inspection report"/>
+          <div class="pdf-preview"><div class="pdf-preview-icon">📄</div><div class="pdf-preview-name">Inspection Report — TCG-HL-TT-1051.pdf</div><div class="pdf-preview-hint">Click to open</div></div>
           <div class="asset-placeholder">📖<br>Insert quality report sample<br><span style="font-size:10px;color:var(--light)">Technical inspection procedure</span></div>
-        </div>
+          <div class="thumb-overlay"><span class="thumb-overlay-pill">↗ Open PDF</span></div>
+        </a>
         <div class="asset-info">
           <div class="asset-title">Quality report</div>
           <div class="asset-desc">Formatted as AQL inspection report. Allowed us to hold vendors to a certain level of consistency with part fabrication.</div>
@@ -295,11 +411,13 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
       </div>
       
       <div class="asset-card">
-        <div class="asset-thumb">
+        <a class="asset-thumb" href="assets/field-assembly-guide.pdf" target="_blank" rel="noopener">
           <span class="asset-badge badge-field">Field Documentation</span>
-          <img src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none"/>
+          <img src="assets/field-guide-preview.png" alt="Field assembly guide sample page"/>
+          <div class="pdf-preview"><div class="pdf-preview-icon">📄</div><div class="pdf-preview-name">field-assembly-guide.pdf</div><div class="pdf-preview-hint">Click to open</div></div>
           <div class="asset-placeholder">📖<br>Insert field guide sample page<br><span style="font-size:10px;color:var(--light)">Illustrated assembly procedure</span></div>
-        </div>
+          <div class="thumb-overlay"><span class="thumb-overlay-pill">↗ Open PDF</span></div>
+        </a>
         <div class="asset-info">
           <div class="asset-title">Field assembly guide — sample page</div>
           <div class="asset-desc">Illustrated step-by-step procedures written for non-technical assemblers. Enabled complete remote installation with zero engineering support.</div>
@@ -530,17 +648,49 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
 </footer>
 
 <script>
+// Smooth scroll for nav links
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
     const t = document.querySelector(a.getAttribute('href'));
     if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'})}
   });
 });
-document.querySelectorAll('.asset-thumb img').forEach(img => {
-  if(img.getAttribute('src') && img.getAttribute('src').length > 0){
-    img.style.display = 'block';
-    const ph = img.closest('.asset-thumb').querySelector('.asset-placeholder');
-    if(ph) ph.style.display = 'none';
+
+// For each asset thumb:
+// - If the <img> src resolves (i.e. it's an image file) → show it, hide placeholder
+// - If the href points to a PDF and there's no image preview → show the PDF tile, hide placeholder
+// - Otherwise → leave the placeholder visible
+document.querySelectorAll('a.asset-thumb').forEach(thumb => {
+  const img = thumb.querySelector('img');
+  const placeholder = thumb.querySelector('.asset-placeholder');
+  const pdfPreview = thumb.querySelector('.pdf-preview');
+  const href = thumb.getAttribute('href') || '';
+  const isPdf = href.toLowerCase().endsWith('.pdf');
+
+  if(img && img.getAttribute('src') && img.getAttribute('src').length > 0){
+    // Attempt to load — on success show img, on error fall back to PDF tile or placeholder
+    img.onload = () => {
+      img.style.display = 'block';
+      if(placeholder) placeholder.style.display = 'none';
+      if(pdfPreview) pdfPreview.style.display = 'none';
+    };
+    img.onerror = () => {
+      img.style.display = 'none';
+      // No preview image — if the artifact itself is a PDF, show the PDF tile
+      if(isPdf && pdfPreview){
+        pdfPreview.style.display = 'flex';
+        if(placeholder) placeholder.style.display = 'none';
+      }
+      // Otherwise leave placeholder visible
+    };
+    // Trigger load check for already-cached images
+    if(img.complete && img.naturalWidth > 0){
+      img.onload();
+    }
+  } else if(isPdf && pdfPreview){
+    // No preview image src set, but href is a PDF — show PDF tile
+    pdfPreview.style.display = 'flex';
+    if(placeholder) placeholder.style.display = 'none';
   }
 });
 </script>
