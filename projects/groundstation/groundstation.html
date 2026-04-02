@@ -122,6 +122,12 @@ strong{font-weight:600;color:var(--text)}
 .disc-list li:last-child{border-bottom:none}
 .disc-list li::before{content:'';display:block;width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:7px}
 
+/* CODE BLOCK */
+.code-block{background:#1e2330;border:1px solid #2e3340;border-radius:8px;padding:18px 20px;margin:16px 0;font-family:'Courier New',Courier,monospace;font-size:12.5px;line-height:1.8;overflow-x:auto;color:#93c5fd}
+.code-block .kw{color:#c084fc}.code-block .fn{color:#60a5fa}.code-block .st{color:#86efac}
+.code-block .cm{color:#6b7a99;font-style:italic}.code-block .nu{color:#f0f2f6}
+.code-block .path{color:#fcd34d}.code-block .dim{color:#475569}
+
 /* FOOTER */
 footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;text-align:center}
 .f-logo{font-size:14px;font-weight:700;color:var(--text);margin-bottom:5px}
@@ -313,7 +319,34 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
 
     <h3 style="margin-top:32px;margin-bottom:4px">Autodesk Vault File Hierarchy</h3>
     <p style="font-size:13px;color:var(--muted);margin-bottom:0">How every model, drawing, and document flows through Vault before reaching production:</p>
-<INSERT>HI</INSERT>
+
+    <div class="code-block">
+<span class="path">Vault/</span><br>
+├── <span class="path">THC — Terminal Housing Case/</span><br>
+<div style="margin-left:20px">├── <span class="path">CAD/</span><br></div>
+<div style="margin-left:40px">├── <span class="path">Assembly/</span><br></div>
+<div style="margin-left:60px">├── <span class="fn">THC-001-TOP-ASSY.iam</span>         <span class="cm"># top-level assembly</span><br></div>
+<div style="margin-left:60px">├── <span class="fn">THC-002-ENCLOSURE-ASSY.iam</span>   <span class="cm"># enclosure sub-assembly</span><br></div>
+<div style="margin-left:60px">└── <span class="fn">THC-003-HARDWARE-ASSY.iam</span>    <span class="cm"># hardware & fastener sub-assembly</span><br></div>
+<div style="margin-left:40px">├── <span class="path">Parts/</span><br></div>
+<div style="margin-left:60px">├── <span class="fn">THC-100-CHASSIS.ipt</span>          <span class="cm"># main enclosure chassis</span><br></div>
+<div style="margin-left:60px">├── <span class="fn">THC-101-LID.ipt</span>              <span class="cm"># access lid — sheet metal</span><br></div>
+<div style="margin-left:60px">├── <span class="fn">THC-102-PANEL-FRONT.ipt</span>      <span class="cm"># front panel — connector cutouts</span><br></div>
+<div style="margin-left:60px">├── <span class="fn">THC-103-PANEL-REAR.ipt</span>       <span class="cm"># rear panel</span><br></div>
+<div style="margin-left:60px">├── <span class="fn">THC-104-BRACKET-MNT.ipt</span>      <span class="cm"># mounting bracket</span><br></div>
+<div style="margin-left:60px">└── <span class="fn">THC-1XX-[...].ipt</span>            <span class="cm"># additional detail parts</span><br></div>
+<div style="margin-left:40px">└── <span class="path">Vendor/</span><br></div>
+<div style="margin-left:60px">└── <span class="fn">THC-9XX-[...].ipt</span>            <span class="cm"># vendor / COTS part models</span><br></div>
+<div style="margin-left:20px">├── <span class="path">Drawings/</span><br></div>
+<div style="margin-left:40px">├── <span class="fn">THC-001-TOP-ASSY.idw</span>         <span class="cm"># assembly drawing — interface dims, callouts</span><br></div>
+<div style="margin-left:40px">├── <span class="fn">THC-100-CHASSIS.idw</span>          <span class="cm"># detail drawing — GD&T, tolerances, finish</span><br></div>
+<div style="margin-left:40px">├── <span class="fn">THC-101-LID.idw</span>              <span class="cm"># detail drawing — sheet metal flat pattern</span><br></div>
+<div style="margin-left:40px">├── <span class="fn">THC-102-PANEL-FRONT.idw</span>      <span class="cm"># detail drawing — cutout locations</span><br></div>
+<div style="margin-left:40px">└── <span class="fn">THC-1XX-[...].idw</span>            <span class="cm"># remaining detail drawings</span><br></div>
+<div style="margin-left:20px">└── <span class="path">Documentation/</span><br></div>
+<div style="margin-left:40px">├── <span class="fn">THC-FIELD-ASSEMBLY-GUIDE.pdf</span> <span class="cm"># illustrated IPC — non-technical install procedure</span><br></div>
+<div style="margin-left:40px">└── <span class="fn">THC-BOM-REV[X].xlsx</span>         <span class="cm"># BOM export — mirrors SAP multi-level structure</span><br></div>
+    </div>
 
     <h3 style="margin-top:32px;margin-bottom:12px">Project data at a glance</h3>
     <div class="spec">
