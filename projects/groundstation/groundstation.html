@@ -88,20 +88,14 @@ a.asset-thumb{
 }
 a.asset-thumb.tall{height:292px}
 
-/* iframe renders the file (PDF or image) full-bleed inside the thumb.
-   pointer-events:none lets clicks pass through to the parent <a>.
-   top:-40px pushes the native PDF toolbar above the overflow:hidden
-   clip boundary so it's never visible. height compensates. */
-a.asset-thumb iframe{
+/* canvas fills the thumb — JS draws the file content into it */
+a.asset-thumb canvas{
   position:absolute;
-  top:-40px;
-  left:0;
+  inset:0;
   width:100%;
-  height:calc(100% + 40px);
-  border:none;
-  display:none;
-  pointer-events:none;
-  background:var(--bg3);
+  height:100%;
+  display:none; /* JS shows it after render */
+  object-fit:cover;
 }
 
 /* Placeholder shown when no src is set yet */
@@ -296,9 +290,9 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
 
     <div class="gallery">
       <div class="asset-card gallery-wide">
-        <a class="asset-thumb tall" href="assets/assembly-iso.png" target="_blank" rel="noopener">
+        <a class="asset-thumb tall" href="assets/assembly-iso.png" target="_blank" rel="noopener" data-src="assets/assembly-iso.png" data-type="image">
           <span class="asset-badge badge-cad">CAD Model</span>
-          <iframe src="assets/assembly-iso.png" title="Full assembly isometric view"></iframe>
+          <canvas></canvas>
           <div class="asset-placeholder">📦<br><br>Insert primary isometric assembly render<br><span style="font-size:10px;color:var(--light)">Full assembly · enclosure · mounting provisions · internal clearances</span></div>
           <div class="thumb-overlay"><span class="thumb-overlay-pill">↗ Open</span></div>
         </a>
@@ -309,9 +303,9 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
       </div>
 
       <div class="asset-card">
-        <a class="asset-thumb tall" href="assets/exploded-view.png" target="_blank" rel="noopener">
+        <a class="asset-thumb tall" href="assets/exploded-view.png" target="_blank" rel="noopener" data-src="assets/exploded-view.png" data-type="image">
           <span class="asset-badge badge-exploded">Exploded View</span>
-          <iframe src="assets/exploded-view.png" title="Exploded view BOM callouts"></iframe>
+          <canvas></canvas>
           <div class="asset-placeholder">💥<br><br>Insert exploded<br>assembly render<br><span style="font-size:10px;color:var(--light)">With BOM callout bubbles</span></div>
           <div class="thumb-overlay"><span class="thumb-overlay-pill">↗ Open</span></div>
         </a>
@@ -322,9 +316,9 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
       </div>
 
       <div class="asset-card">
-        <a class="asset-thumb" href="assets/detail-drawing.pdf" target="_blank" rel="noopener">
+        <a class="asset-thumb" href="assets/detail-drawing.pdf" target="_blank" rel="noopener" data-src="assets/detail-drawing.pdf" data-type="pdf">
           <span class="asset-badge badge-drawing">Engineering Drawing</span>
-          <iframe src="assets/detail-drawing.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH" title="Detail drawing enclosure body"></iframe>
+          <canvas></canvas>
           <div class="asset-placeholder">📋<br>Insert detail drawing<br><span style="font-size:10px;color:var(--light)">Enclosure body · GD&T · tolerances</span></div>
           <div class="thumb-overlay"><span class="thumb-overlay-pill">↗ Open PDF</span></div>
         </a>
@@ -335,9 +329,9 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
       </div>
 
       <div class="asset-card">
-        <a class="asset-thumb" href="assets/assembly-drawing.pdf" target="_blank" rel="noopener">
+        <a class="asset-thumb" href="assets/assembly-drawing.pdf" target="_blank" rel="noopener" data-src="assets/assembly-drawing.pdf" data-type="pdf">
           <span class="asset-badge badge-drawing">Engineering Drawing</span>
-          <iframe src="assets/assembly-drawing.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH" title="Assembly drawing top level"></iframe>
+          <canvas></canvas>
           <div class="asset-placeholder">📐<br>Insert assembly drawing<br><span style="font-size:10px;color:var(--light)">Top-level · sub-assembly callouts</span></div>
           <div class="thumb-overlay"><span class="thumb-overlay-pill">↗ Open PDF</span></div>
         </a>
@@ -348,9 +342,9 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
       </div>
 
       <div class="asset-card">
-        <a class="asset-thumb" href="assets/cross-section.png" target="_blank" rel="noopener">
+        <a class="asset-thumb" href="assets/cross-section.png" target="_blank" rel="noopener" data-src="assets/cross-section.png" data-type="image">
           <span class="asset-badge badge-cad">CAD Model</span>
-          <iframe src="assets/cross-section.png" title="Cross-section internal layout"></iframe>
+          <canvas></canvas>
           <div class="asset-placeholder">✂️<br>Insert cross-section<br><span style="font-size:10px;color:var(--light)">Internal stack · connector routing</span></div>
           <div class="thumb-overlay"><span class="thumb-overlay-pill">↗ Open</span></div>
         </a>
@@ -361,9 +355,9 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
       </div>
 
       <div class="asset-card">
-        <a class="asset-thumb" href="assets/as-built-photo.jpg" target="_blank" rel="noopener">
+        <a class="asset-thumb" href="assets/as-built-photo.jpg" target="_blank" rel="noopener" data-src="assets/as-built-photo.jpg" data-type="image">
           <span class="asset-badge badge-photo">Hardware Photo</span>
-          <iframe src="assets/as-built-photo.jpg" title="As-built fabricated unit"></iframe>
+          <canvas></canvas>
           <div class="asset-placeholder">📷<br>Insert as-built photo<br><span style="font-size:10px;color:var(--light)">Fabricated unit · final finish</span></div>
           <div class="thumb-overlay"><span class="thumb-overlay-pill">↗ Open</span></div>
         </a>
@@ -374,9 +368,9 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
       </div>
 
       <div class="asset-card">
-        <a class="asset-thumb" href="Work Examples/Inspection Report - TCG-HL-TT-1051.pdf" target="_blank" rel="noopener">
+        <a class="asset-thumb" href="Work Examples/Inspection Report - TCG-HL-TT-1051.pdf" target="_blank" rel="noopener" data-src="Work Examples/Inspection Report - TCG-HL-TT-1051.pdf" data-type="pdf">
           <span class="asset-badge badge-technical">Technical Documentation</span>
-          <iframe src="Work Examples/Inspection Report - TCG-HL-TT-1051.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH" title="Quality inspection report"></iframe>
+          <canvas></canvas>
           <div class="asset-placeholder">📖<br>Insert quality report sample<br><span style="font-size:10px;color:var(--light)">Technical inspection procedure</span></div>
           <div class="thumb-overlay"><span class="thumb-overlay-pill">↗ Open PDF</span></div>
         </a>
@@ -387,9 +381,9 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
       </div>
       
       <div class="asset-card">
-        <a class="asset-thumb" href="assets/field-assembly-guide.pdf" target="_blank" rel="noopener">
+        <a class="asset-thumb" href="assets/field-assembly-guide.pdf" target="_blank" rel="noopener" data-src="assets/field-assembly-guide.pdf" data-type="pdf">
           <span class="asset-badge badge-field">Field Documentation</span>
-          <iframe src="assets/field-assembly-guide.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH" title="Field assembly guide sample page"></iframe>
+          <canvas></canvas>
           <div class="asset-placeholder">📖<br>Insert field guide sample page<br><span style="font-size:10px;color:var(--light)">Illustrated assembly procedure</span></div>
           <div class="thumb-overlay"><span class="thumb-overlay-pill">↗ Open PDF</span></div>
         </a>
@@ -622,8 +616,13 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
   </div>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
-// Smooth scroll for nav links
+// Point PDF.js worker at the CDN copy
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+// Smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
     const t = document.querySelector(a.getAttribute('href'));
@@ -631,25 +630,74 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 });
 
-// Show each iframe and hide its placeholder once the iframe loads.
-// If the iframe errors (file not found), leave the placeholder visible.
-document.querySelectorAll('a.asset-thumb iframe').forEach(frame => {
-  const src = frame.getAttribute('src');
-  if(!src) return; // no src set — leave placeholder
+// Render each asset thumb
+document.querySelectorAll('a.asset-thumb[data-src]').forEach(thumb => {
+  const src         = thumb.dataset.src;
+  const type        = thumb.dataset.type;   // 'pdf' | 'image'
+  const canvas      = thumb.querySelector('canvas');
+  const placeholder = thumb.querySelector('.asset-placeholder');
+  if(!src || !canvas) return;
 
-  frame.style.display = 'block';
-  const placeholder = frame.closest('a.asset-thumb').querySelector('.asset-placeholder');
+  if(type === 'pdf'){
+    // Use PDF.js to rasterize page 1 into the canvas — no browser viewer involved
+    pdfjsLib.getDocument(src).promise.then(pdf => {
+      return pdf.getPage(1);
+    }).then(page => {
+      const thumbW = canvas.parentElement.offsetWidth;
+      const thumbH = canvas.parentElement.offsetHeight;
 
-  frame.addEventListener('load', () => {
-    // A load event fires even for error pages in some browsers;
-    // hiding the placeholder on load is correct for local file serving.
-    if(placeholder) placeholder.style.display = 'none';
-  });
+      // Render at 2× for retina sharpness
+      const scale  = 2;
+      const vp     = page.getViewport({scale});
 
-  frame.addEventListener('error', () => {
-    // File not found — keep placeholder, hide broken iframe
-    frame.style.display = 'none';
-  });
+      // Size the canvas to cover the thumb (cover behaviour: fill width, crop height)
+      const ratio  = thumbW / (vp.width / scale);
+      const finalVp = page.getViewport({scale: ratio * scale});
+
+      canvas.width  = finalVp.width;
+      canvas.height = finalVp.height;
+      canvas.style.width  = '100%';
+      canvas.style.height = '100%';
+      canvas.style.objectFit = 'cover';
+
+      return page.render({canvasContext: canvas.getContext('2d'), viewport: finalVp}).promise;
+    }).then(() => {
+      canvas.style.display = 'block';
+      if(placeholder) placeholder.style.display = 'none';
+    }).catch(() => {
+      // File missing or blocked — leave placeholder
+    });
+
+  } else {
+    // Image — draw into canvas via an off-screen Image element
+    const img = new Image();
+    img.onload = () => {
+      const thumbW = canvas.parentElement.offsetWidth  * 2; // 2× retina
+      const thumbH = canvas.parentElement.offsetHeight * 2;
+
+      // Cover: scale so the image fills the thumb, crop excess
+      const scaleX = thumbW / img.naturalWidth;
+      const scaleY = thumbH / img.naturalHeight;
+      const s      = Math.max(scaleX, scaleY);
+
+      canvas.width  = thumbW;
+      canvas.height = thumbH;
+      canvas.style.width  = '100%';
+      canvas.style.height = '100%';
+
+      const ctx = canvas.getContext('2d');
+      const dw  = img.naturalWidth  * s;
+      const dh  = img.naturalHeight * s;
+      const dx  = (thumbW - dw) / 2;
+      const dy  = (thumbH - dh) / 2;
+      ctx.drawImage(img, dx, dy, dw, dh);
+
+      canvas.style.display = 'block';
+      if(placeholder) placeholder.style.display = 'none';
+    };
+    img.onerror = () => { /* leave placeholder */ };
+    img.src = src;
+  }
 });
 </script>
 </body>
