@@ -51,6 +51,42 @@ strong{font-weight:600;color:var(--text)}
 .hero-meta{display:flex;gap:24px;margin-top:20px;flex-wrap:wrap}
 .hero-meta-item .lbl{font-size:10px;color:var(--light);text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px}
 .hero-meta-item .val{font-size:13px;font-weight:600;color:var(--text)}
+/* Hero two-column layout */
+.hero-cols{display:grid;grid-template-columns:1fr 400px;gap:40px;align-items:start}
+.hero-img-col{position:relative}
+.hero-img-box{
+  width:100%;
+  aspect-ratio:4/3;
+  border-radius:10px;
+  overflow:hidden;
+  border:1px solid var(--border);
+  background:var(--bg3);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.hero-img-box img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.hero-img-placeholder{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  font-size:11px;
+  color:var(--light);
+  text-align:center;
+  padding:20px;
+  line-height:1.6;
+}
+@media(max-width:800px){
+  .hero-cols{grid-template-columns:1fr}
+  .hero-img-col{display:none}
+}
 .tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px}
 .tag{display:inline-block;font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:#fff;border:1px solid var(--border);color:var(--muted)}
 
@@ -257,26 +293,40 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 0;t
 <!-- HERO -->
 <div class="hero">
   <div class="wrap">
-    <div class="hero-tag">&nbsp;Curtiss-Wright · Defense Solutions</div>
-    <div class="hero-title">Terminal Housing Case</div>
-    <p class="hero-sub">A ground-up redesign of a mobile military radio enclosure — from blank-slate 3D model to field-deployed hardware. Sole ownership of the full stack: CAD, drawings, PDM, BOM, vendor management, and field documentation.</p>
-    <div class="hero-meta">
-      <div class="hero-meta-item"><div class="lbl">Company</div><div class="val">Curtiss-Wright</div></div>
-      <div class="hero-meta-item"><div class="lbl">Role</div><div class="val">Mechanical Design Engineer & PDM Administrator</div></div>
-      <div class="hero-meta-item"><div class="lbl">Type</div><div class="val">Hardware Redesign</div></div>
-      <div class="hero-meta-item"><div class="lbl">Sector</div><div class="val">Defense Ground System</div></div>
-    </div>
-    <div class="tag-row">
-      <span class="tag">Autodesk Inventor</span>
-      <span class="tag">Autodesk Vault PDM</span>
-      <span class="tag">GD&T</span>
-      <span class="tag">Sheet Metal Design</span>
-      <span class="tag">Machined Part Design</span>
-      <span class="tag">BOM Management</span>
-      <span class="tag">Vendor Coordination</span>
-      <span class="tag">SAP ERP</span>
-      <span class="tag">Quality Reports</span>
-      <span class="tag">Technical Documentation</span>
+    <div class="hero-cols">
+      <div class="hero-text-col">
+        <div class="hero-tag">&nbsp;Curtiss-Wright · Defense Solutions</div>
+        <div class="hero-title">Terminal Housing Case</div>
+        <p class="hero-sub">A ground-up redesign of a mobile military radio enclosure — from blank-slate 3D model to field-deployed hardware. Sole ownership of the full stack: CAD, drawings, PDM, BOM, vendor management, and field documentation.</p>
+        <div class="hero-meta">
+          <div class="hero-meta-item"><div class="lbl">Company</div><div class="val">Curtiss-Wright</div></div>
+          <div class="hero-meta-item"><div class="lbl">Role</div><div class="val">Mechanical Design Engineer & PDM Administrator</div></div>
+          <div class="hero-meta-item"><div class="lbl">Type</div><div class="val">Hardware Redesign</div></div>
+          <div class="hero-meta-item"><div class="lbl">Sector</div><div class="val">Defense Ground System</div></div>
+        </div>
+        <div class="tag-row">
+          <span class="tag">Autodesk Inventor</span>
+          <span class="tag">Autodesk Vault PDM</span>
+          <span class="tag">GD&T</span>
+          <span class="tag">Sheet Metal Design</span>
+          <span class="tag">Machined Part Design</span>
+          <span class="tag">BOM Management</span>
+          <span class="tag">Vendor Coordination</span>
+          <span class="tag">SAP ERP</span>
+          <span class="tag">Quality Reports</span>
+          <span class="tag">Technical Documentation</span>
+        </div>
+      </div>
+      <div class="hero-img-col">
+        <div class="hero-img-box">
+          <img src="assets/TCG-THC-v4.png" alt="Terminal Housing Case — fabricated unit"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="hero-img-placeholder" style="display:none">
+            📷<br>Terminal Housing Case<br>
+            <span style="font-size:10px">Place an image at assets/TCG-THC-v4.png</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
