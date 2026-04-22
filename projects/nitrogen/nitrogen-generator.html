@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Nitrogen Generator — Tyler Gamble</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--bg2:#f6f6f3;--bg3:#eeeeea;
+  --text:#1a1a1a;--muted:#555;--light:#888;
+  --accent:#1a4fa8;--accent2:#0e7a5e;
+  --border:#dededd;--warn:#8a560a;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Helvetica Neue',Arial,sans-serif;font-size:15px;line-height:1.7;color:var(--text);background:var(--bg)}
+a{color:var(--accent)}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.97);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1040px;margin:0 auto;padding:0 32px;display:flex;align-items:center;height:50px;overflow-x:auto}
+.nav-inner::-webkit-scrollbar{display:none}
+.nav-home{font-size:13px;font-weight:700;color:var(--text);text-decoration:none;padding-right:16px;border-right:1px solid var(--border);margin-right:4px;white-space:nowrap;flex-shrink:0}
+.nav-home:hover{color:var(--accent)}
+.nav-link{font-size:12px;color:var(--light);padding:0 11px;white-space:nowrap;flex-shrink:0;text-decoration:none;transition:color .15s}
+.nav-link:hover{color:var(--text)}
+
+/* LAYOUT */
+.wrap{max-width:1040px;margin:0 auto;padding:0 32px}
+section{padding:64px 0;border-bottom:1px solid var(--border)}
+section:last-of-type{border-bottom:none}
+
+/* TYPE */
+h2{font-size:26px;font-weight:700;letter-spacing:-.01em;color:var(--text);margin-bottom:6px}
+p{margin-bottom:10px;color:var(--muted)}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.lead{font-size:16px;color:var(--muted);line-height:1.65;max-width:600px}
+.rule{width:32px;height:2px;background:var(--accent);border-radius:2px;margin:12px 0 20px}
+
+/* HERO */
+.hero{background:var(--bg2);padding:64px 0 56px;border-bottom:1px solid var(--border)}
+.hero-tag{display:inline-flex;align-items:center;background:#fff;border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--muted);margin-bottom:14px}
+.hero-title{font-size:42px;font-weight:800;letter-spacing:-.02em;line-height:1.05;color:var(--text);margin-bottom:4px}
+.hero-sub{font-size:16px;color:var(--muted);max-width:620px;margin-top:10px;line-height:1.65}
+.hero-meta{display:flex;gap:24px;margin-top:20px;flex-wrap:wrap}
+.hero-meta-item .lbl{font-size:10px;color:var(--light);text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px}
+.hero-meta-item .val{font-size:13px;font-weight:600;color:var(--text)}
+
+/* CALLOUT */
+.callout{display:flex;gap:12px;align-items:flex-start;border-radius:8px;padding:14px 16px;margin:28px 0 0}
+.callout-warn{background:#fef9ee;border:1px solid #f5d97a}
+.callout-warn .callout-body{font-size:13px;color:#6b4c0a;line-height:1.6}
+.callout-warn .callout-body strong{color:#4a3300;font-weight:600;display:block;margin-bottom:2px}
+
+/* FOOTER */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 0}
+.f-logo{font-size:18px;font-weight:800;color:var(--text);margin-bottom:4px}
+.f-logo span{color:var(--accent)}
+.f-sub{font-size:12px;color:var(--light);margin-bottom:18px}
+.f-links{display:flex;gap:4px;flex-wrap:wrap}
+.f-link{font-size:12px;color:var(--muted);text-decoration:none;padding:4px 10px;border-radius:4px;border:1px solid var(--border);transition:.15s}
+.f-link:hover{color:var(--text);border-color:var(--text)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-home" href="../../index.html">Portfolio</a>
+    <a class="nav-link" href="#overview">Overview</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="wrap">
+    <div class="hero-tag">Professional · Research &amp; Development</div>
+    <div class="hero-title">Nitrogen Generation<br>System.</div>
+    <p class="hero-sub">Redesign of an existing Cold Brew coffee system to regain competitiveness in the market.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><div class="lbl">Status</div><div class="val">In Progress</div></div>
+      <div class="hero-meta-item"><div class="lbl">Company</div><div class="val">Parker Hannifin</div></div>
+      <div class="hero-meta-item"><div class="lbl">Category</div><div class="val">Research &amp; Development</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="wrap">
+    <div class="eyebrow">Project overview</div>
+    <h2>About this project.</h2>
+    <div class="rule"></div>
+    <p class="lead">Redesign existing Cold Brew coffee system to regain competitiveness in the market. Prototype achieving 25% size reduction and 15% cost savings while maintaining nitrogen purity.</p>
+
+    <div class="callout callout-warn">
+      <div class="callout-body">
+        <strong>Page under construction</strong>
+        This page is a placeholder. Full documentation — including technical details, diagrams, and results — is on the way.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="f-logo">Tyler<span>.</span></div>
+    <div class="f-sub">Mechanical Engineer · Boston, MA</div>
+    <div class="f-links">
+      <a class="f-link" href="../../index.html">Portfolio</a>
+      <a class="f-link" href="../../index.html#projects">Projects</a>
+      <a class="f-link" href="../../index.html#contact">Contact</a>
+      <a class="f-link" href="../../images/resume.pdf" target="_blank">Resume</a>
+    </div>
+    <p style="font-size:11px;color:var(--border);margin-top:18px">© 2026 Tyler Gamble</p>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+  });
+});
+</script>
+</body>
+</html>
